@@ -5,8 +5,6 @@ const Product = require("../models/product.model");
 const asyncHandler = require('express-async-handler');
 const validateMongoDbId = require("../../utils/validateMongodbId");
 
-const jwt = require('jsonwebtoken');
-
 const addtoCart = asyncHandler(async (req) => {
     const { productId, quantity } = req.body;
 
@@ -58,18 +56,23 @@ const getCart = asyncHandler(async (req) => {
     const { _id } = req.user;
     validateMongoDbId(_id);
     try {
+      let cart = await Cart.findOne({ userId: _id });
+
+      let cartTotal = 0;
+      for (let i = 0; i < cart.products.length; i++) {
+        const getProduct = await Product.findById(cart.products[i].product);
+        cart.products[i].totalPriceItem = cart.products[i].quantity * getProduct.priceSale;
+        cartTotal = cartTotal + cart.products[i].totalPriceItem;
+      }
+      cart.cartTotal = cartTotal;
+      cart = await cart.save();
+
       const getcart = await Cart.findOne({ userId: _id },{
         createdAt: 0,
         updatedAt: 0,
         __v: 0,
         userId: 0,
       }).populate({path: "products.product", select:'name description images specs priceSale'});
-      // let cartTotal = 0;
-      // for (let i = 0; i < cart.products.length; i++) {
-      //   cartTotal = cartTotal + cart.products[i].totalPriceItem;
-      // }
-      // cart.cartTotal = cartTotal;
-      // cart = await cart.save();
       return getcart;
     } catch (error) {
       throw new Error(error);
