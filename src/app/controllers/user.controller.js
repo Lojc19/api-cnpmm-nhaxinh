@@ -126,4 +126,22 @@ const deleteaUser = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = {createUser, loginUser, loginAdmin, getallUser, getaUser, updatedUser, deleteaUser, handleRefreshToken, logout, updatePassword, forgotPasswordToken, resetPassword};
+const addToWishlist = asyncHandler(async (req, res) => {
+  const data = await userService.addToWishlist(req);
+  res.json({
+    status: "success",
+    data,
+    message: "",
+  });
+});
+
+const getWishlist = asyncHandler(async (req, res) => {
+  const data = await userService.getWishlist(req);
+  res.json({
+    status: "success",
+    data,
+    message: "",
+  });
+});
+
+module.exports = {createUser, loginUser, loginAdmin, getallUser, getaUser, updatedUser, deleteaUser, handleRefreshToken, logout, updatePassword, forgotPasswordToken, resetPassword, addToWishlist, getWishlist};

@@ -39,10 +39,6 @@ var userSchema = new mongoose.Schema({
         required:true,
         default: "customer",
     },
-    cart:{
-        type: Array,
-        default: [],
-    },
     wishlist:[{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Product"

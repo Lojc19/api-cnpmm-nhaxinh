@@ -8,6 +8,6 @@ router.post("/create-cate",authMiddleware, isAdmin, createCate);
 
 router.get("/getaCategory/:id", getaCategory);
 
-router.get("/getallCategory", getallCategory);
+router.get("/all", getallCategory);
 
 module.exports = router;

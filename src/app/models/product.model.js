@@ -10,30 +10,33 @@ var productSchema = new mongoose.Schema(
       unique: true,
     },
     name: {
-        type: String,
-        required: true,
-        trim: true,
+      type: String,
+      required: true,
+      trim: true,
+    },
+    slug: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
     },
     description: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
-    shortDescription: {
-        type: String,
-        require: true,
-    },
-    images: {
-      type: Array,
-      defaul: [],
-    },
+    images: [
+      {
+        url: String,
+      }
+    ],
     category: {
       type: mongoose.Schema.Types.ObjectId,
-      require: true, 
+      require: true,
       ref: "Category"
     },
     room: {
       type: mongoose.Schema.Types.ObjectId,
-      require: true, 
+      require: true,
       ref: "Room"
     },
     specs: [
@@ -48,7 +51,11 @@ var productSchema = new mongoose.Schema(
     },
     sale: {
       type: Number,
-      defaul: 0,
+      default: 0,
+    },
+    priceSale: {
+      type: Number,
+      default: 0,
     },
     quantity: {
       type: Number,
@@ -58,26 +65,16 @@ var productSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    ratings: [
-      {
-        star: Number,
-        comment: String,
-        postedby: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-      },
-    ],
+
     totalrating: {
       type: String,
       default: 0,
-    },
-    realease_date: {
-      type: Date,
-      default: Date.now,
-      require: true,
     }
   },
   {
-    collection: "products", 
-    timestamps: true }
+    collection: "products",
+    timestamps: true
+  }
 );
 
 //Export the model

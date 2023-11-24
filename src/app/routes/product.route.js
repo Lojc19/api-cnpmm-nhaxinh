@@ -5,7 +5,6 @@ const {
   getAllProduct,
   updateProduct,
   deleteProduct,
-  addToWishlist,
   rating,
   getProductCategory,
   getProductRoom,
@@ -15,11 +14,10 @@ const router = express.Router();
 
 router.post("/create-product", authMiddleware, isAdmin, createProduct);
 
-router.get("/getaProduct/:id", getaProduct);
+router.get("/product-detail/:id", getaProduct);
 router.get("/category/:id", getProductCategory);
 router.get("/room/:id", getProductRoom);
 
-router.put("/wishlist", authMiddleware, addToWishlist);
 router.put("/rating", authMiddleware, rating);
 
 router.put("/updateProduct/:_id", authMiddleware, isAdmin, updateProduct);

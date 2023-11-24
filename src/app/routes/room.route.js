@@ -8,6 +8,6 @@ router.post("/create-room",authMiddleware, isAdmin, createRoom);
 
 router.get("/getCateByRoom/:id", getaRoom);
 
-router.get("/getallRoom", getallRoom);
+router.get("/all", getallRoom);
 
 module.exports = router;

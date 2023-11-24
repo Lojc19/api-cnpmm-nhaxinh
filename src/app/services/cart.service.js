@@ -24,10 +24,10 @@ const addtoCart = asyncHandler(async (req) => {
           //product exists in the cart, update the quantity
           let productItem = cart.products[itemIndex];
           productItem.quantity = productItem.quantity + quantity;
-          productItem.totalPriceItem = product.price * productItem.quantity;
+          productItem.totalPriceItem = product.priceSale * productItem.quantity;
           cart.products[itemIndex] = productItem;
         } else {
-            totalPriceItem = product.price * quantity;
+            totalPriceItem = product.priceSale * quantity;
             //product does not exists in cart, add new item
             cart.products.push({ product, quantity, totalPriceItem});
         }
@@ -39,7 +39,7 @@ const addtoCart = asyncHandler(async (req) => {
         cart = await cart.save();
         return cart;
       } else {
-        totalPriceItem = product.price * quantity;
+        totalPriceItem = product.priceSale * quantity;
         cartTotal = totalPriceItem;
         //no cart for user, create new cart
         const newCart = await Cart.create({
@@ -58,17 +58,25 @@ const getCart = asyncHandler(async (req) => {
     const { _id } = req.user;
     validateMongoDbId(_id);
     try {
-      const cart = await Cart.findOne({ userId: _id },{
+      const getcart = await Cart.findOne({ userId: _id },{
         createdAt: 0,
         updatedAt: 0,
         __v: 0,
         userId: 0,
-      }).populate({path: "products.product", select:'name shortDescription images price'});
-      return cart;
+      }).populate({path: "products.product", select:'name description images specs priceSale'});
+      // let cartTotal = 0;
+      // for (let i = 0; i < cart.products.length; i++) {
+      //   cartTotal = cartTotal + cart.products[i].totalPriceItem;
+      // }
+      // cart.cartTotal = cartTotal;
+      // cart = await cart.save();
+      return getcart;
     } catch (error) {
       throw new Error(error);
     }
 });
+
+// }).populate({path: "products.product", select:'name shortDescription images price priceSale'});
 
 const emptyCart = asyncHandler(async (req) => {
     const { _id } = req.user;
@@ -76,16 +84,26 @@ const emptyCart = asyncHandler(async (req) => {
       const findCart = await Cart.findOne({userId: _id});
       if(findCart)
       {
-        const data = await Cart.findOneAndRemove({ userId: _id });
+        const data = await Cart.findOneAndDelete({ userId: _id });
         return data
       }
     } catch (error) {
       throw new Error(error);
   }
 });
-
+// if(update == "delete")
+// {
+//   cart.cartTotal = cart.cartTotal - cart.products[itemIndex].totalPriceItem;
+//   cart.products.splice(itemIndex,1);
+//   // cart = await cart.save();
+//   if(cart.products.length == 0)
+//   {
+//     await Cart.findOneAndRemove({ userId });
+//     return null
+//   }
+// }
 const updateCart = asyncHandler(async (req) => {
-  const { update, productId } = req.body;
+  const { quantity, productId } = req.body;
   const userId = req.user._id; //TODO: the logged in user id
   try {
     let cart = await Cart.findOne({ userId });
@@ -95,60 +113,41 @@ const updateCart = asyncHandler(async (req) => {
       let itemIndex = cart.products.findIndex(p => p.product == productId);
       if(itemIndex > -1)
       {
-        if(update == "delete")
+        if(quantity == 0)
         {
           cart.cartTotal = cart.cartTotal - cart.products[itemIndex].totalPriceItem;
           cart.products.splice(itemIndex,1);
           // cart = await cart.save();
           if(cart.products.length == 0)
           {
-            await Cart.findOneAndRemove({ userId });
+            await Cart.findOneAndDelete({ userId });
             return null
           }
         }
-        
-        if(update == "plus")
-        {
-          if((cart.products[itemIndex].quantity + 1) <= getProduct.quantity)
+        else {
+          if(quantity <= getProduct.quantity)
           {
-            cart.cartTotal = cart.cartTotal + getProduct.price;
-            cart.products[itemIndex].quantity = cart.products[itemIndex].quantity + 1;
-            cart.products[itemIndex].totalPriceItem = getProduct.price * cart.products[itemIndex].quantity;
-            // cart = await cart.save();
+            cart.products[itemIndex].quantity = quantity;
+            cart.products[itemIndex].totalPriceItem = getProduct.priceSale * cart.products[itemIndex].quantity;
+              // cart = await cart.save();
           }
           else {
             throw new Error("Số lượng không khả dụng")
           }
         }
 
-        if(update == "minus")
-        {
-          if((cart.products[itemIndex].quantity - 1) > 0)
-          {
-            cart.cartTotal = cart.cartTotal + getProduct.price;
-            cart.products[itemIndex].quantity = cart.products[itemIndex].quantity - 1;
-            cart.products[itemIndex].totalPriceItem = getProduct.price * cart.products[itemIndex].quantity;
-            cart = await cart.save();
-          }
-          else {
-            cart.cartTotal = cart.cartTotal - cart.products[itemIndex].totalPriceItem;
-            cart.products.splice(itemIndex,1);
-            // cart = await cart.save();
-            if(cart.products.length == 0)
-            {
-              await Cart.findOneAndRemove({ userId });
-              return null
-            }
-          }
+        let cartTotal = 0;
+        for (let i = 0; i < cart.products.length; i++) {
+          cartTotal = cartTotal + cart.products[i].totalPriceItem;
         }
-
+        cart.cartTotal = cartTotal;
         cart = await cart.save();
         const getCart = await Cart.findOne({ userId },{
           createdAt: 0,
           updatedAt: 0,
           __v: 0,
           userId: 0,
-        }).populate({path: "products.product", select:'name shortDescription images price'});
+        }).populate({path: "products.product", select:'name description images specs priceSale'});
         return getCart;
       }
       else {

@@ -2,22 +2,49 @@ const Product = require("../models/product.model");
 const User = require("../models/user.model");
 const asyncHandler = require("express-async-handler");
 const validateMongoDbId = require("../../utils/validateMongodbId");
+const slugify = require("slugify");
 
-const createProduct = asyncHandler(async (product) => {
+const createProduct = asyncHandler(async (req) => {
   try {
-    const productNew = await Product.create(product);
+    if (req.body.name) {
+      req.body.slug = slugify(req.body.name);
+    }
+    const productNew = await Product.create({
+      code: req.body.code,
+      name: req.body.name,
+      slug: req.body.slug,
+      description: req.body.description,
+      images: req.body.images,
+      category: req.body.category,
+      room: req.body.room,
+      specs: req.body.specs,
+      price: req.body.price,
+      priceSale: req.body.price,
+      quantity: req.body.quantity
+    });
     return productNew;
   } catch (error) {
     throw new Error(error);
   }
 });
 
-const updateProduct = asyncHandler(async (_id, dataUpdate) => {
+const updateProduct = asyncHandler(async (req) => {
   try {
-    const updateProduct = await Product.findOneAndUpdate({_id: _id}, dataUpdate, {
+    const { _id } = req.params;
+    const dataUpdate = req.body;
+    validateMongoDbId(_id);
+    let product = await Product.findById(_id);
+    await Product.findOneAndUpdate({_id: _id}, dataUpdate, {
       new: true,
     });
-    return updateProduct
+    if(dataUpdate.sale != 0){
+      product.priceSale = product.price * ((100 - dataUpdate.sale) / 100);
+    }
+    else {
+      product.priceSale = product.price;
+    }
+    await product.save()
+    return null
   } catch (error) {
     throw new Error(error);
   }
@@ -44,7 +71,7 @@ const getaProduct = asyncHandler(async (id) => {
       updatedAt: 0,
       realease_date: 0,
       __v: 0,
-    }).populate("category", "nameCate icUrl").populate("room", "nameRoom icUrl");
+    }).populate("category", "nameCate icUrl").populate("room", "nameRoom");
     return findProduct;
   } catch (error) {
     throw new Error(error);
@@ -61,7 +88,7 @@ const getAllProduct = asyncHandler(async () => {
       updatedAt: 0,
       realease_date: 0,
       __v: 0,
-    }).populate("category", "nameCate icUrl").populate("room", "nameRoom icUrl");
+    }).populate("category", "nameCate").populate("room", "nameRoom");
     return getAll;
   } catch (error) {
     throw new Error(error);
@@ -78,7 +105,7 @@ const getProductCategory = asyncHandler(async (id) => {
       updatedAt: 0,
       realease_date: 0,
       __v: 0,
-    }).populate("category", "nameCate icUrl").populate("room", "nameRoom icUrl");
+    }).populate("category", "nameCate").populate("room", "nameRoom icUrl");
     return products;
   } catch (error) {
     throw new Error(error);
@@ -95,7 +122,7 @@ const getProductRoom = asyncHandler(async (id) => {
         updatedAt: 0,
         realease_date: 0,
         __v: 0,
-      }).populate("category", "nameCate icUrl").populate("room", "nameRoom icUrl");
+      }).populate("category", "nameCate").populate("room", "nameRoom");
     return product;
   } catch (error) {
     throw new Error(error);

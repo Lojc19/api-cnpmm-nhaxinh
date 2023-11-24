@@ -6,10 +6,6 @@ var categorySchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
-    icUrl: {
-        type: String,
-        required: true,
-    }
 }, {
     collection: "categories",
     timestamps: true,

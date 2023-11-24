@@ -6,21 +6,20 @@ const productService = require("../services/product.service")
 const validateMongoDbId = require("../../utils/validateMongodbId");
 
 const createProduct = asyncHandler(async (req, res) => {
-  const data = await productService.createProduct(req.body);
+  const data = await productService.createProduct(req);
   res.json({
     status: "success",
-    data
+    data,
+    message: "Thêm sản phẩm thành công"
   })
 });
 
 const updateProduct = asyncHandler(async (req, res) => {
-  const { _id } = req.params;
-  const dataUpdate = req.body;
-  validateMongoDbId(_id);
-  const data = await productService.updateProduct(_id,dataUpdate);
+  const data = await productService.updateProduct(req);
   res.json({
     status: "success",
-    data
+    data,
+    message: "Cập nhật thành công"
   })
 });
 
@@ -41,7 +40,8 @@ const getaProduct = asyncHandler(async (req, res) => {
   const data = await productService.getaProduct(id);
   res.json({
     status: "success",
-    data
+    data,
+    message: "",
   })
 });
 
@@ -49,7 +49,8 @@ const getAllProduct = asyncHandler(async (req, res) => {
   const data = await productService.getAllProduct();
   res.json({
     status: "success",
-    data
+    data,
+    message: "",
   })
 });
 
@@ -59,7 +60,8 @@ const getProductCategory = asyncHandler(async (req, res) => {
   const data = await productService.getProductCategory(id);
   res.json({
     status:"success",
-    data
+    data,
+    message: "",
   });
 });
 
@@ -69,42 +71,9 @@ const getProductRoom = asyncHandler(async (req, res) => {
   const data = await productService.getProductRoom(id);
   res.json({
     status:"success",
-    data
+    data,
+    message: "",
   });
-});
-
-const addToWishlist = asyncHandler(async (req, res) => {
-  const { _id } = req.user;
-  const { prodId } = req.body;
-  try {
-    const user = await User.findById(_id);
-    const alreadyadded = user.wishlist.find((id) => id.toString() === prodId);
-    if (alreadyadded) {
-      let user = await User.findByIdAndUpdate(
-        _id,
-        {
-          $pull: { wishlist: prodId },
-        },
-        {
-          new: true,
-        }
-      );
-      res.json(user);
-    } else {
-      let user = await User.findByIdAndUpdate(
-        _id,
-        {
-          $push: { wishlist: prodId },
-        },
-        {
-          new: true,
-        }
-      );
-      res.json(user);
-    }
-  } catch (error) {
-    throw new Error(error);
-  }
 });
 
 const rating = asyncHandler(async (req, res) => {
@@ -169,7 +138,6 @@ module.exports = {
   getAllProduct,
   updateProduct,
   deleteProduct,
-  addToWishlist,
   rating,
   getProductCategory,
   getProductRoom,

@@ -140,13 +140,12 @@ const forgotPasswordToken = asyncHandler(async (req, res) => {
   try {
     const token = await user.createPasswordResetToken();
     await user.save();
-    // const resetURL = `Xin chào, Please follow this link to reset Your Password. This link is valid till 10 minutes from now. <a href='http://localhost:3000/api/user/reset-password/${token}'>Click Here</>`;
-    const resetURL = ''
+    const resetURL = `Hello, Please follow this link to reset Your Password. This link is valid till 10 minutes from now. <a href='http://localhost:3000/api/user/reset-password/${token}'>Click Here</>`;
     const data = {
       to: email,
       text: "Hey User",
       subject: "Forgot Password Link",
-      link:  `http://localhost:3000/api/user/reset-password/${token}`,
+      link:  resetURL,
     };
     sendEmail(data);
     res.json(token);
@@ -252,4 +251,49 @@ const deleteaUser = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = {createUser, loginUser, getallUser, getaUser, updatedUser, deleteaUser, handleRefreshToken, logout, updatePassword, forgotPasswordToken, resetPassword};
+const getWishlist = asyncHandler(async (req) => {
+  const { _id } = req.user;
+  try {
+    const findUser = await User.findById(_id,).populate({path: "wishlist", select:'name description images specs priceSale'});
+    const data = findUser.wishlist;
+    return data;
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+const addToWishlist = asyncHandler(async (req) => {
+  const { _id } = req.user;
+  const { prodId } = req.body;
+  try {
+    const user = await User.findById(_id);
+    const alreadyadded = user.wishlist.find((id) => id.toString() === prodId);
+    if (alreadyadded) {
+      let user = await User.findByIdAndUpdate(
+        _id,
+        {
+          $pull: { wishlist: prodId },
+        },
+        {
+          new: true,
+        }
+      );
+      return null
+    } else {
+      let user = await User.findByIdAndUpdate(
+        _id,
+        {
+          $push: { wishlist: prodId },
+        },
+        {
+          new: true,
+        }
+      );
+      return null
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+module.exports = {createUser, loginUser, getallUser, getaUser, updatedUser, deleteaUser, handleRefreshToken, logout, updatePassword, forgotPasswordToken, resetPassword, addToWishlist, getWishlist};
