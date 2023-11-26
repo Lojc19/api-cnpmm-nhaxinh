@@ -56,12 +56,11 @@ const getCart = asyncHandler(async (req) => {
     const { _id } = req.user;
     validateMongoDbId(_id);
     try {
-      let cart = await Cart.findOne({ userId: _id });
+      let cart = await Cart.findOne({ userId: _id }).populate({path: "products.product", select:'priceSale'});
 
       let cartTotal = 0;
       for (let i = 0; i < cart.products.length; i++) {
-        const getProduct = await Product.findById(cart.products[i].product);
-        cart.products[i].totalPriceItem = cart.products[i].quantity * getProduct.priceSale;
+        cart.products[i].totalPriceItem = cart.products[i].quantity * cart.products[i].product.priceSale;
         cartTotal = cartTotal + cart.products[i].totalPriceItem;
       }
       cart.cartTotal = cartTotal;
@@ -145,13 +144,8 @@ const updateCart = asyncHandler(async (req) => {
         }
         cart.cartTotal = cartTotal;
         cart = await cart.save();
-        const getCart = await Cart.findOne({ userId },{
-          createdAt: 0,
-          updatedAt: 0,
-          __v: 0,
-          userId: 0,
-        }).populate({path: "products.product", select:'name description images specs priceSale'});
-        return getCart;
+        const getcart = await getCart(req);
+        return getcart;
       }
       else {
         throw new Error("Không tìm thấy sản phẩm trong giỏ hàng")
