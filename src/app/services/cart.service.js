@@ -57,7 +57,10 @@ const getCart = asyncHandler(async (req) => {
     validateMongoDbId(_id);
     try {
       let cart = await Cart.findOne({ userId: _id }).populate({path: "products.product", select:'priceSale'});
-
+      if(!cart)
+      {
+        return []
+      }
       let cartTotal = 0;
       for (let i = 0; i < cart.products.length; i++) {
         cart.products[i].totalPriceItem = cart.products[i].quantity * cart.products[i].product.priceSale;
