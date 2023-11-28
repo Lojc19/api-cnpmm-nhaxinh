@@ -6,10 +6,15 @@ var roomSchema = new mongoose.Schema({
         required:true,
         unique: true,
     },
+    icUrl: {
+        type: String,
+        required: true,
+        default: ""
+    },
     categories: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Category",
-        defaul: [],
+        default: [],
     }],
 }, {
     collection: "rooms",

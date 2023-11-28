@@ -14,6 +14,7 @@ const createProduct = asyncHandler(async (req) => {
       name: req.body.name,
       slug: req.body.slug,
       description: req.body.description,
+      shortDescription: req.body.shortDescription,
       images: req.body.images,
       category: req.body.category,
       room: req.body.room,

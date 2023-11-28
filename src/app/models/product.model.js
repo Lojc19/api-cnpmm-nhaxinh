@@ -24,6 +24,10 @@ var productSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    shortDescription: {
+      type: String,
+      require: true,
+    },
     images: [
       {
         url: String,
