@@ -126,7 +126,7 @@ const updateCart = asyncHandler(async (req) => {
           if(cart.products.length == 0)
           {
             await Cart.findOneAndDelete({ userId });
-            return null
+            return []
           }
         }
         else {
