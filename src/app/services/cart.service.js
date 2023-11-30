@@ -90,7 +90,7 @@ const emptyCart = asyncHandler(async (req) => {
       if(findCart)
       {
         const data = await Cart.findOneAndDelete({ userId: _id });
-        return data
+        return []
       }
     } catch (error) {
       throw new Error(error);
