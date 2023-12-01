@@ -26,7 +26,7 @@ const createUser = asyncHandler(async (reqBody) => {
       lastname: newUser?.lastname,
       email: newUser?.email,
       username: newUser?.username,
-      phone: newUser?.phone,
+      phoneNumber: newUser?.phone,
     };
     return data;
   } else {
@@ -205,7 +205,7 @@ const getaUser = asyncHandler(async (_id) => {
       lastname: 1,
       email: 1,
       username: 1,
-      phone: 1,
+      phoneNumber: 1,
     });
     return findUser
   } catch (error) {
