@@ -6,7 +6,7 @@ const createAddress = asyncHandler(async (req, res) => {
     await addressService.createAddress(req);
     res.json({
         status: "success",
-        data: null,
+        data: [],
         message: "Thêm địa chỉ thành công"
     })
 });
@@ -25,7 +25,7 @@ const updateAddress = asyncHandler(async (req, res) => {
     await addressService.updateAddress(_id,req);
     res.json({
         status: "success",
-        data: null,
+        data: [],
         message: "Cập nhật thành công"
     })
 });
@@ -35,7 +35,7 @@ const deleteAddress = asyncHandler(async (req, res) => {
     await addressService.deleteAddress(_id);
     res.json({
         status: "success",
-        data: null,
+        data: [],
         message: "Xóa thành công"
     })
 });
