@@ -9,6 +9,14 @@ const createAddress = asyncHandler(async (req) => {
     const findAddress = await Address.findOne({userId: req.user._id})
     if(findAddress)
     {
+      if(req.body.default == true){
+        await Address.findOneAndUpdate({userId: req.user._id, default: true}, {
+          default: false
+        }, 
+        {
+          new: true,
+        });
+      }
       await Address.create(
         {
           nameAddress: req.body.nameAddress,
@@ -16,6 +24,7 @@ const createAddress = asyncHandler(async (req) => {
           district: req.body.district,
           ward: req.body.ward,
           note: req.body?.note,
+          default: req.body?.default,
           userId: _id
         });
     }
