@@ -11,6 +11,7 @@ const roomRouter = require('./src/app/routes/room.route');
 const cateRouter = require('./src/app/routes/category.route');
 const cartRouter = require('./src/app/routes/cart.route');
 const addressRouter = require('./src/app/routes/address.route');
+const couponRouter = require('./src/app/routes/coupon.route');
 
 const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
@@ -32,6 +33,7 @@ app.use("/api/room", roomRouter);
 app.use("/api/category", cateRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/address", addressRouter);
+app.use("/api/coupon", couponRouter);
 
 app.use(notFound);
 app.use(errorHandler);

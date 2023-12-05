@@ -49,13 +49,13 @@ const createAddress = asyncHandler(async (req) => {
 const getAddress = asyncHandler(async (req) => {
   try {
     const { _id } = req.user;
-    const allAddress = await Address.find({userId: _id}, {
+    const getAddress = await Address.find({userId: _id}, {
       userId: 0,
       createdAt: 0,
       updatedAt: 0,
       __v: 0,
     });
-    return allAddress
+    return getAddress
   } catch (error) {
     throw new Error(error);
   }
