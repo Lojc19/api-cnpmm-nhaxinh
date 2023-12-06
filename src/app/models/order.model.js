@@ -5,6 +5,21 @@ var orderSchema = new mongoose.Schema(
   {
     PaymentMethod: {
         type: String,
+        required: true,
+    },
+    name: {
+      type: String,
+      required: true,
+    },
+    email:{
+      type:String,
+      required:true,
+    },
+    phoneNumber:{
+      type:String,
+      minlength: 10,
+      maxlength: 10,
+      required:true,
     },
     products: [
       {
@@ -18,18 +33,39 @@ var orderSchema = new mongoose.Schema(
     ],
     total: {
         type: Number,
+        required: true,
+    },
+    addressShipping: {
+      province: {
+        type: String,
+        required: true,
+      },
+      district: {
+        type: String,
+        required: true,
+      },
+      ward: {
+        type: String,
+        required: true,
+      },
+      note: {
+        type: String,
+        default: "",
+      },
     },
     status: {
       type: String,
-      default: "Not Processed",
+      default: "Processing",
       enum: [
-        "Not Processed",
-        "Cash on Delivery",
         "Processing",
         "Dispatched",
         "Cancelled",
         "Delivered",
       ],
+    },
+    coupon: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Coupon",
     },
     orderTime: {
         type: Date,

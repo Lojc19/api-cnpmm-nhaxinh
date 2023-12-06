@@ -73,7 +73,12 @@ var productSchema = new mongoose.Schema(
     totalrating: {
       type: String,
       default: 0,
-    }
+    },
+
+    enable: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
     collection: "products",

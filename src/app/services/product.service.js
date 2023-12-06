@@ -67,12 +67,12 @@ const getaProduct = asyncHandler(async (id) => {
     const findProduct = await Product.findById(id,{
       ratings: 0,
       sold: 0,
-      ratings: 0,
       createdAt: 0,
       updatedAt: 0,
       realease_date: 0,
       __v: 0,
-    }).populate("category", "nameCate icUrl").populate("room", "nameRoom");
+      enable: 0,
+    }).sort({createdAt: -1}).populate("category", "nameCate icUrl").populate("room", "nameRoom");
     return findProduct;
   } catch (error) {
     throw new Error(error);
@@ -81,15 +81,15 @@ const getaProduct = asyncHandler(async (id) => {
 
 const getAllProduct = asyncHandler(async () => {
   try {
-    const getAll = Product.find({},{
+    const getAll = Product.find({enable: true},{
       ratings: 0,
       sold: 0,
-      ratings: 0,
       createdAt: 0,
       updatedAt: 0,
       realease_date: 0,
       __v: 0,
-    }).populate("category", "nameCate").populate("room", "nameRoom");
+      enable: 0,
+    }).sort({createdAt: -1}).populate("category", "nameCate").populate("room", "nameRoom");
     return getAll;
   } catch (error) {
     throw new Error(error);
@@ -98,15 +98,15 @@ const getAllProduct = asyncHandler(async () => {
 
 const getProductCategory = asyncHandler(async (id) => {
   try {
-    const products = await Product.find({category: id}, {
+    const products = await Product.find({category: id, enable: true}, {
       ratings: 0,
       sold: 0,
-      ratings: 0,
       createdAt: 0,
       updatedAt: 0,
       realease_date: 0,
       __v: 0,
-    }).populate("category", "nameCate").populate("room", "nameRoom icUrl");
+      enable: 0,
+    }).sort({createdAt: -1}).populate("category", "nameCate").populate("room", "nameRoom icUrl");
     return products;
   } catch (error) {
     throw new Error(error);
@@ -115,15 +115,15 @@ const getProductCategory = asyncHandler(async (id) => {
 
 const getProductRoom = asyncHandler(async (id) => {
   try {
-    const product = await Product.find({room: id},{
+    const product = await Product.find({room: id, enable: true},{
         ratings: 0,
         sold: 0,
-        ratings: 0,
         createdAt: 0,
         updatedAt: 0,
         realease_date: 0,
         __v: 0,
-      }).populate("category", "nameCate").populate("room", "nameRoom");
+        enable: 0,
+      }).sort({createdAt: -1}).populate("category", "nameCate").populate("room", "nameRoom");
     return product;
   } catch (error) {
     throw new Error(error);
