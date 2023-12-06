@@ -6,6 +6,7 @@ const { generateRefreshToken } = require("../../config/refreshtoken");
 const crypto = require("crypto");
 const sendEmail = require("../controllers/email.controller");
 const jwt = require("jsonwebtoken");
+const { NONAME } = require("dns");
 
 // register User 
 const createUser = asyncHandler(async (reqBody) => {
@@ -51,8 +52,8 @@ const loginUser = asyncHandler(async (req, res) => {
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       maxAge: 72 * 60 * 60 * 1000,
-      SameSite: 'None', 
-      secure: true
+      sameSite: 'None',
+      secure: true,
     });
     const data = {
       token: generateToken(findUser?._id),
@@ -80,6 +81,9 @@ const loginAdmin = asyncHandler(async (req, res) => {
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       maxAge: 72 * 60 * 60 * 1000,
+      sameSite: 'None', 
+      secure: true,
+      domain: 'localhost:3000',
     });
     res.json({
       _id: findAdmin?._id,
