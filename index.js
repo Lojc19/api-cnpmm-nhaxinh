@@ -23,7 +23,7 @@ const { errorHandler, notFound } = require('./src/app/middlewares/errorHandler')
 db.connect();
 
 app.use(morgan("dev"));
-app.use(cors());
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -40,6 +40,7 @@ app.use("/api/order", orderRouter);
 app.use(notFound);
 app.use(errorHandler);
 
-app.listen(port, () => {
+app.use(cors())
+ app.listen(port, function () {
   console.log(`Example app listening on port ${port}`)
 })
