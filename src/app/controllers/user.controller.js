@@ -36,11 +36,12 @@ const loginAdmin = asyncHandler(async (req,res) => {
 });
 
 const handleRefreshToken = asyncHandler(async (req,res) => {
-  const data = await userService.handleRefreshToken(req,res);
-  console.log(data)
+  const accessToken = await userService.handleRefreshToken(req,res);
   res.json({
     status: "success",
-    data,
+    data: {
+      accessToken: accessToken,
+    },
     message: "AcessToken"
   })
 });
