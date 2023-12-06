@@ -7,6 +7,7 @@ const addtoCart = asyncHandler(async (req, res) => {
     const data = await cartService.addtoCart(req);
     res.json({
         status: "success",
+        data,
     })
 });
 

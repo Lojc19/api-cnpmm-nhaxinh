@@ -35,7 +35,8 @@ const addtoCart = asyncHandler(async (req) => {
         }
         cart.cartTotal = cartTotal;
         cart = await cart.save();
-        return cart;
+        const getcart = await getCart(req);
+        return getcart;
       } else {
         totalPriceItem = product.priceSale * quantity;
         cartTotal = totalPriceItem;
@@ -45,7 +46,8 @@ const addtoCart = asyncHandler(async (req) => {
           products: [{ product, quantity, totalPriceItem}],
           cartTotal,
         });
-        return newCart;
+        const getcart = await getCart(req);
+        return getcart;
       }
     } catch (err) {
         throw new Error(err);
