@@ -12,8 +12,7 @@ const createReview = asyncHandler(async (req, res) => {
 });
   
 const getReviewDetail = asyncHandler(async (req, res) => {
-  const { _id } = req.params;
-  const data = await orderService.getOrderDetail(_id);
+  const data = await reviewService.getReviewDetail(req);
   res.json({
     status:"success",
     data,
@@ -40,20 +39,18 @@ const getReviewByProductID = asyncHandler(async (req, res) => {
 });
 
 const updateReview = asyncHandler(async (req, res) => {
-  const data = await orderService.updateOrderStatusUser(req)
+  const data = await reviewService.updateReview(req)
   res.json({
     status:"success",
-    data,
     message: "Cập nhật thành công"
   })
 });
 
 const deleteReview = asyncHandler(async (req, res) => {
-  const data = await orderService.updateOrderStatusAdmin(req)
+  const data = await reviewService.deleteReview(req)
   res.json({
     status:"success",
-    data,
-    message: "Cập nhật thành công"
+    message: "Xóa thành công"
   })
 });
 

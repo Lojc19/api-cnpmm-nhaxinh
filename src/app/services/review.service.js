@@ -50,7 +50,8 @@ const createReview = asyncHandler(async (req) => {
   
 const getReviewDetail = asyncHandler(async (req) => {
   try {
-    const listReview = await Review.find({}, {
+    const {_id} = req.params;
+    const listReview = await Review.findOne({_id: _id}, {
       star: 1,
       comment: 1,
       createdAt: 1,
@@ -93,22 +94,51 @@ const getReviewByProductID = asyncHandler(async (req) => {
   }
 });
 
-const updateReview = asyncHandler(async (req, res) => {
-  const data = await orderService.updateOrderStatusUser(req)
-  res.json({
-    status:"success",
-    data,
-    message: "Cập nhật thành công"
-  })
+const updateReview = asyncHandler(async (req) => {
+  try {
+    const { _id } = req.params;
+    await Review.findOneAndUpdate({_id: _id}, {
+      enable: req.body?.enable,
+    }, 
+    {
+      new: true,
+    });
+    return
+  }
+  catch(error) {
+    throw new Error(error);
+  }
 });
 
 const deleteReview = asyncHandler(async (req, res) => {
-  const data = await orderService.updateOrderStatusAdmin(req)
-  res.json({
-    status:"success",
-    data,
-    message: "Cập nhật thành công"
-  })
+  try {
+    const { _id } = req.params;
+    let review = await Review.findOne({_id: _id})
+    await Review.findOneAndDelete({_id});
+
+    const getallReview = await Review.find({productID: review.productID});
+    let totalReview = getallReview.length;
+    let ratingsum = 0;
+    for (let i = 0; i < getallReview.length; i++) {
+      ratingsum = ratingsum + getallReview[i].star;
+    }
+    let actualRating = ratingsum / totalReview;
+    if(totalReview == 0)
+    {
+      actualRating = 0;
+    }
+    let finalproduct = await Product.findByIdAndUpdate(
+      review.productID,
+      {
+        totalrating: actualRating,
+      },
+      { new: true }
+    );
+    return
+  }
+  catch(error) {
+    throw new Error(error);
+  }
 });
 
 
