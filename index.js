@@ -1,16 +1,9 @@
 const bodyParser = require("body-parser");
-const express = require('express')
+const express = require('express');
 const db = require('./src/config/db/connect');
-const cors = require('cors')
+const cors = require('cors');
 
-const app = express()
-app.use(cors(
-  {
-    origin : 'https://cnpmm-admin.vercel.app/ localhost:3000',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true
-  }
-))
+const app = express();
 
 const dotenv = require("dotenv").config()
 const port = process.env.PORT || 4000
@@ -32,7 +25,11 @@ const { errorHandler, notFound } = require('./src/app/middlewares/errorHandler')
 
 
 db.connect();
-
+app.use(cors({
+  origin: '*',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true
+}));
 app.use(morgan("dev"));
 
 app.use(bodyParser.json());
