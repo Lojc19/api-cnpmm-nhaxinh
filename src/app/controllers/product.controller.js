@@ -46,7 +46,7 @@ const getaProduct = asyncHandler(async (req, res) => {
 });
 
 const getAllProduct = asyncHandler(async (req, res) => {
-  const data = await productService.getAllProduct();
+  const data = await productService.getAllProduct(req);
   res.json({
     status: "success",
     data,

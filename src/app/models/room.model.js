@@ -8,7 +8,6 @@ var roomSchema = new mongoose.Schema({
     },
     icUrl: {
         type: String,
-        required: true,
         default: ""
     },
     categories: [{

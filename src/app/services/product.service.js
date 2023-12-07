@@ -79,9 +79,30 @@ const getaProduct = asyncHandler(async (id) => {
   }
 });
 
-const getAllProduct = asyncHandler(async () => {
+const getAllProduct = asyncHandler(async (req) => {
   try {
-    const getAll = Product.find({enable: true},{
+    // pagination
+    let page = req.body.page || 1;
+    let limit = req.body.limit || 20;
+    
+    let filter = {
+      enable: true,
+    }
+
+    if(req.body.category)
+    {
+      filter = {...filter, category: req.body.category}
+    }
+    if(req.body.room)
+    {
+      filter = {...filter, room: req.body.room}
+    }
+    if (req.body.page) {
+      const productCount = await Product.countDocuments();
+      if (((page - 1) * limit) >= productCount) throw new Error("This Page does not exists");
+    }
+
+    const product = await Product.find(filter,{
       ratings: 0,
       sold: 0,
       createdAt: 0,
@@ -89,8 +110,17 @@ const getAllProduct = asyncHandler(async () => {
       realease_date: 0,
       __v: 0,
       enable: 0,
-    }).sort({createdAt: -1}).populate("category", "nameCate").populate("room", "nameRoom");
-    return getAll;
+    }).sort({createdAt: -1}).skip((page - 1) * limit).limit(limit);;
+    // const getAll = Product.find({enable: true},{
+    //   ratings: 0,
+    //   sold: 0,
+    //   createdAt: 0,
+    //   updatedAt: 0,
+    //   realease_date: 0,
+    //   __v: 0,
+    //   enable: 0,
+    // }).sort({createdAt: -1}).populate("category", "nameCate").populate("room", "nameRoom");
+    return product;
   } catch (error) {
     throw new Error(error);
   }
