@@ -79,6 +79,24 @@ const getaProduct = asyncHandler(async (id) => {
   }
 });
 
+const searchProduct = asyncHandler(async (req) => {
+  try {
+    const {s} = req.params; 
+    const searchResult = await Product.find({ name: { $regex: new RegExp(s, 'i') }, enable: true }, {
+      ratings: 0,
+      sold: 0,
+      createdAt: 0,
+      updatedAt: 0,
+      realease_date: 0,
+      __v: 0,
+      enable: 0,
+    }).sort({createdAt: -1}).populate("category", "nameCate icUrl").populate("room", "nameRoom");
+    return searchResult;
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
 const getAllProduct = asyncHandler(async (req) => {
   try {
     // pagination
@@ -193,4 +211,5 @@ module.exports = {
   addToWishlist,
   getProductCategory,
   getProductRoom,
+  searchProduct,
 };

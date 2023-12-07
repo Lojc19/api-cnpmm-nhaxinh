@@ -54,6 +54,15 @@ const getAllProduct = asyncHandler(async (req, res) => {
   })
 });
 
+const searchProduct = asyncHandler(async (req, res) => {
+  const data = await productService.searchProduct(req);
+  res.json({
+    status: "success",
+    data,
+    message: "",
+  })
+});
+
 const getProductCategory = asyncHandler(async (req, res) => {
   const { id } = req.params;
   validateMongoDbId(id);
@@ -85,4 +94,5 @@ module.exports = {
   deleteProduct,
   getProductCategory,
   getProductRoom,
+  searchProduct
 };
