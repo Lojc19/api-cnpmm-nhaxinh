@@ -26,7 +26,7 @@ const { errorHandler, notFound } = require('./src/app/middlewares/errorHandler')
 
 db.connect();
 app.use(cors({
-  origin: '*',
+  origin: ['https://cnpmm-admin.vercel.app','http://localhost:3000'],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true
 }));
