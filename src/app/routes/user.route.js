@@ -14,6 +14,9 @@ router.post("/loginAdmin", loginAdmin);
 router.get("/all-users",authMiddleware, isAdmin, getallUser);
 // get info user
 router.get("/info-user",authMiddleware, getaUser);
+
+// get info admin
+router.get("/admin/:_id",authMiddleware, isAdmin , getaUser);
 // update user
 router.put("/update-user",authMiddleware, updatedUser);
 // delete user

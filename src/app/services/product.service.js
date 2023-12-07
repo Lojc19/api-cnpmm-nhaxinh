@@ -88,7 +88,6 @@ const getAllProduct = asyncHandler(async (req) => {
     let filter = {
       enable: true,
     }
-
     if(req.body.category)
     {
       filter = {...filter, category: req.body.category}
@@ -111,15 +110,6 @@ const getAllProduct = asyncHandler(async (req) => {
       __v: 0,
       enable: 0,
     }).sort({createdAt: -1}).skip((page - 1) * limit).limit(limit);;
-    // const getAll = Product.find({enable: true},{
-    //   ratings: 0,
-    //   sold: 0,
-    //   createdAt: 0,
-    //   updatedAt: 0,
-    //   realease_date: 0,
-    //   __v: 0,
-    //   enable: 0,
-    // }).sort({createdAt: -1}).populate("category", "nameCate").populate("room", "nameRoom");
     return product;
   } catch (error) {
     throw new Error(error);

@@ -99,6 +99,17 @@ const getaUser = asyncHandler(async (req, res) => {
     });
 });
 
+// get info 1 user admin
+const getaUserAdmin = asyncHandler(async (req, res) => {
+  const { _id } = req.params;
+  const data = await userService.getaUserAdmin(_id);
+  res.json({
+    status: "success",
+    data,
+    message: "",
+  });
+});
+
 
 // update user
 const updatedUser = asyncHandler(async (req, res) => {
@@ -144,4 +155,4 @@ const getWishlist = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = {createUser, loginUser, loginAdmin, getallUser, getaUser, updatedUser, deleteaUser, handleRefreshToken, logout, updatePassword, forgotPasswordToken, resetPassword, addToWishlist, getWishlist};
+module.exports = {createUser, loginUser, loginAdmin, getallUser, getaUser, updatedUser, deleteaUser, handleRefreshToken, logout, updatePassword, forgotPasswordToken, resetPassword, addToWishlist, getWishlist, getaUserAdmin};
