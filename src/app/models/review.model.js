@@ -15,6 +15,10 @@ var reviewSchema = new mongoose.Schema(
         type: mongoose.Schema.Types.ObjectId,
         ref: "Product"
     },
+    enable: {
+      type: Boolean,
+      default: true,
+    },
     userID: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"

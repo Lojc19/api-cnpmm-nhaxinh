@@ -22,6 +22,8 @@ const cartRouter = require('./src/app/routes/cart.route');
 const addressRouter = require('./src/app/routes/address.route');
 const couponRouter = require('./src/app/routes/coupon.route');
 const orderRouter = require('./src/app/routes/order.route');
+const reviewRouter = require('./src/app/routes/coupon.route');
+
 
 const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
@@ -44,6 +46,7 @@ app.use("/api/cart", cartRouter);
 app.use("/api/address", addressRouter);
 app.use("/api/coupon", couponRouter);
 app.use("/api/order", orderRouter);
+app.use("/api/review", reviewRouter);
 
 app.use(notFound);
 app.use(errorHandler);

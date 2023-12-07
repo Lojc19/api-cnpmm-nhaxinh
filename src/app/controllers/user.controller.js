@@ -26,8 +26,7 @@ const loginUser = asyncHandler(async (req,res) => {
 });
 
 const loginAdmin = asyncHandler(async (req,res) => {
-  const { username, password } = req.body;
-  const data = await userService.loginAdmin(username, password);
+  const data = await userService.loginAdmin(req, res);
   res.json({
     status: "success",
     data,
