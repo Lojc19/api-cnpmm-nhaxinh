@@ -4,6 +4,7 @@ const User = require("../models/user.model");
 const Cart = require("../models/cart.model");
 const Coupon = require("../models/coupon.model");
 const Product = require("../models/product.model");
+const ObjectId = require("mongodb").ObjectId;
 
 const createOrder = asyncHandler(async (req) => {
     const { couponApplied } = req.body;
@@ -33,7 +34,7 @@ const createOrder = asyncHandler(async (req) => {
             note: req.body?.addressShipping.note,
         },
         total: finalTotal,
-        coupon: coupon._id,
+        coupon: coupon._id || null,
         orderby: user._id,
         orderStatus: "Processing",
       }).save();
@@ -63,6 +64,7 @@ const getAllOrders = asyncHandler(async () => {
         }).sort({orderTime: -1})
         .populate({path: "products.product", select:'name description images specs priceSale'})  
         .populate({path: "orderby", select:'firstname lastname'})
+        .populate({path: "coupon", select:'code discount'})
         .exec();
       return allOrders
     } catch (error) {
