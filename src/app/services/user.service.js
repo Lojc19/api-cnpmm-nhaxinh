@@ -54,7 +54,6 @@ const loginUser = asyncHandler(async (req, res) => {
       maxAge: 72 * 60 * 60 * 1000,
       sameSite: 'None',
       secure: true,
-      domain: "http://localhost:3000",
     });
     const data = {
       token: generateToken(findUser?._id),
@@ -84,7 +83,6 @@ const loginAdmin = asyncHandler(async (req, res) => {
       maxAge: 72 * 60 * 60 * 1000,
       sameSite: 'None', 
       secure: true,
-      domain: 'localhost:3000',
     });
     const data = {
       token: generateToken(findAdmin?._id),
