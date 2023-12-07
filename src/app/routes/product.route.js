@@ -5,7 +5,6 @@ const {
   getAllProduct,
   updateProduct,
   deleteProduct,
-  rating,
   getProductCategory,
   getProductRoom,
 } = require("../controllers/product.controller");
@@ -17,8 +16,6 @@ router.post("/create-product", authMiddleware, isAdmin, createProduct);
 router.get("/product-detail/:id", getaProduct);
 router.get("/category/:id", getProductCategory);
 router.get("/room/:id", getProductRoom);
-
-router.put("/rating", authMiddleware, rating);
 
 router.put("/updateProduct/:_id", authMiddleware, isAdmin, updateProduct);
 router.delete("/:id", authMiddleware, isAdmin, deleteProduct);

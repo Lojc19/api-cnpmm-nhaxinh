@@ -66,9 +66,9 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 const loginAdmin = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
   // check if user exists or not
-  const findAdmin = await User.findOne({ email });
+  const findAdmin = await User.findOne({ username });
   if (findAdmin.role !== "admin") throw new Error("Not Authorised");
   if (findAdmin && (await findAdmin.isPasswordMatched(password))) {
     const refreshToken = await generateRefreshToken(findAdmin?._id);
@@ -86,14 +86,10 @@ const loginAdmin = asyncHandler(async (req, res) => {
       secure: true,
       domain: 'localhost:3000',
     });
-    res.json({
-      _id: findAdmin?._id,
-      firstname: findAdmin?.firstname,
-      lastname: findAdmin?.lastname,
-      email: findAdmin?.email,
-      mobile: findAdmin?.mobile,
+    const data = {
       token: generateToken(findAdmin?._id),
-    });
+    }
+    return data
   } else {
     throw new Error("Invalid Credentials");
   }
@@ -303,4 +299,4 @@ const addToWishlist = asyncHandler(async (req) => {
   }
 });
 
-module.exports = {createUser, loginUser, getallUser, getaUser, updatedUser, deleteaUser, handleRefreshToken, logout, updatePassword, forgotPasswordToken, resetPassword, addToWishlist, getWishlist};
+module.exports = {createUser, loginUser, getallUser, getaUser, updatedUser, deleteaUser, handleRefreshToken, logout, updatePassword, forgotPasswordToken, resetPassword, addToWishlist, getWishlist, loginAdmin};

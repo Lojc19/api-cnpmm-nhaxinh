@@ -7,6 +7,7 @@ const app = express()
 app.use(cors(
   {
     origin : 'http://localhost:3000',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true
   }
 ))
@@ -22,7 +23,7 @@ const cartRouter = require('./src/app/routes/cart.route');
 const addressRouter = require('./src/app/routes/address.route');
 const couponRouter = require('./src/app/routes/coupon.route');
 const orderRouter = require('./src/app/routes/order.route');
-const reviewRouter = require('./src/app/routes/coupon.route');
+const reviewRouter = require('./src/app/routes/review.route');
 
 
 const cookieParser = require("cookie-parser");

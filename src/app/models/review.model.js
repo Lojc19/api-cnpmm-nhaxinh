@@ -17,7 +17,7 @@ var reviewSchema = new mongoose.Schema(
     },
     enable: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     userID: {
         type: mongoose.Schema.Types.ObjectId,
@@ -25,7 +25,7 @@ var reviewSchema = new mongoose.Schema(
     }
   },
   {
-    collection: "carts",
+    collection: "reviews",
     timestamps: true,
   }
 );
