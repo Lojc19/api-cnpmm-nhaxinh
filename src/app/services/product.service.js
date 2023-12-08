@@ -159,29 +159,30 @@ const getAllProduct = asyncHandler(async (req) => {
 const getAllProductAdmin = asyncHandler(async (req) => {
   try {
     // pagination
-    let page = req.body.page || 1;
-    let limit = req.body.limit || 20;
+    // let page = req.body.page || 1;
+    // let limit = req.body.limit || 20;
 
     let filter = {
     }
-    if(req.body.category)
-    {
-      filter = {...filter, category: req.body.category}
-    }
-    if(req.body.room)
-    {
-      filter = {...filter, room: req.body.room}
-    }
-    if (req.body.page) {
-      const productCount = await Product.countDocuments();
-      if (((page - 1) * limit) >= productCount) throw new Error("This Page does not exists");
-    }
+    // if(req.body.category)
+    // {
+    //   filter = {...filter, category: req.body.category}
+    // }
+    // if(req.body.room)
+    // {
+    //   filter = {...filter, room: req.body.room}
+    // }
+    // if (req.body.page) {
+    //   const productCount = await Product.countDocuments();
+    //   if (((page - 1) * limit) >= productCount) throw new Error("This Page does not exists");
+    // }
 
     const product = await Product.find(filter,{
       createdAt: 0,
       updatedAt: 0,
       __v: 0,
-    }).sort({createdAt: -1}).skip((page - 1) * limit).limit(limit);;
+    }).sort({createdAt: -1});
+    // skip((page - 1) * limit).limit(limit);;
     return product;
   } catch (error) {
     throw new Error(error);
