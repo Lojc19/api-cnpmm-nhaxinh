@@ -96,17 +96,22 @@ const getAllProduct = asyncHandler(async (req) => {
     // pagination
     let page = req.body.page || 1;
     let limit = req.body.limit || 20;
-    
+
     let filter = {
       enable: true,
     }
+    let sort = { }
+    if(req.body.price)
+    {
+      sort = {...filter, price: req.body.sort};
+    }
     if(req.body.category)
     {
-      filter = {...filter, category: req.body.category}
+      filter = {...filter, category: req.body.category};
     }
     if(req.body.room)
     {
-      filter = {...filter, room: req.body.room}
+      filter = {...filter, room: req.body.room};
     }
     let productCount = 0
     if (req.body.page) {
@@ -136,7 +141,7 @@ const getAllProductAdmin = asyncHandler(async (req) => {
     // pagination
     let page = req.body.page || 1;
     let limit = req.body.limit || 20;
-    
+
     let filter = {
     }
     if(req.body.category)

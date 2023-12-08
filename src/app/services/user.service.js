@@ -1,4 +1,5 @@
 const User = require("../models/user.model");
+const Product = require("../models/product.model");
 const asyncHandler = require('express-async-handler');
 const validateMongoDbId = require("../../utils/validateMongodbId");
 const { generateToken } = require("../../config/jwtToken");
@@ -6,7 +7,6 @@ const { generateRefreshToken } = require("../../config/refreshtoken");
 const crypto = require("crypto");
 const sendEmail = require("../controllers/email.controller");
 const jwt = require("jsonwebtoken");
-const { NONAME } = require("dns");
 
 // register User 
 const createUser = asyncHandler(async (reqBody) => {
@@ -273,7 +273,7 @@ const deleteaUser = asyncHandler(async (req, res) => {
 const getWishlist = asyncHandler(async (req) => {
   const { _id } = req.user;
   try {
-    const findUser = await User.findById(_id).populate({path: "wishlist", select:'name description images specs priceSale'});
+    const findUser = await User.findById(_id).populate({path: "wishlist", select:'_id name images price priceSale'});
     const data = findUser.wishlist;
     return data;
   } catch (error) {
@@ -286,6 +286,13 @@ const addToWishlist = asyncHandler(async (req) => {
   const { prodId } = req.body;
   try {
     const user = await User.findById(_id);
+    const product = await Product.findById(prodId, {
+      _id: 1,
+      name: 1,
+      images: 1,
+      price: 1,
+      priceSale: 1,
+    });
     const alreadyadded = user.wishlist.find((id) => id.toString() === prodId);
     if (alreadyadded) {
       let user = await User.findByIdAndUpdate(
@@ -297,7 +304,7 @@ const addToWishlist = asyncHandler(async (req) => {
           new: true,
         }
       );
-      return prodId
+      return product
     } else {
       let user = await User.findByIdAndUpdate(
         _id,
@@ -308,7 +315,7 @@ const addToWishlist = asyncHandler(async (req) => {
           new: true,
         }
       );
-      return prodId
+      return product
     }
   } catch (error) {
     throw new Error(error);
