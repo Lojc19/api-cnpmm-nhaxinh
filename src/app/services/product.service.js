@@ -65,13 +65,9 @@ const deleteProduct = asyncHandler(async (req, res) => {
 const getaProduct = asyncHandler(async (id) => {
   try {
     const findProduct = await Product.findById(id,{
-      ratings: 0,
-      sold: 0,
       createdAt: 0,
       updatedAt: 0,
-      realease_date: 0,
       __v: 0,
-      enable: 0,
     }).sort({createdAt: -1}).populate("category", "nameCate icUrl").populate("room", "nameRoom");
     return findProduct;
   } catch (error) {
@@ -83,11 +79,9 @@ const searchProduct = asyncHandler(async (req) => {
   try {
     const {s} = req.params; 
     const searchResult = await Product.find({ name: { $regex: new RegExp(s, 'i') }, enable: true }, {
-      ratings: 0,
       sold: 0,
       createdAt: 0,
       updatedAt: 0,
-      realease_date: 0,
       __v: 0,
       enable: 0,
     }).sort({createdAt: -1}).populate("category", "nameCate icUrl").populate("room", "nameRoom");
@@ -120,13 +114,43 @@ const getAllProduct = asyncHandler(async (req) => {
     }
 
     const product = await Product.find(filter,{
-      ratings: 0,
       sold: 0,
       createdAt: 0,
       updatedAt: 0,
-      realease_date: 0,
       __v: 0,
       enable: 0,
+    }).sort({createdAt: -1}).skip((page - 1) * limit).limit(limit);;
+    return product;
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+const getAllProductAdmin = asyncHandler(async (req) => {
+  try {
+    // pagination
+    let page = req.body.page || 1;
+    let limit = req.body.limit || 20;
+    
+    let filter = {
+    }
+    if(req.body.category)
+    {
+      filter = {...filter, category: req.body.category}
+    }
+    if(req.body.room)
+    {
+      filter = {...filter, room: req.body.room}
+    }
+    if (req.body.page) {
+      const productCount = await Product.countDocuments();
+      if (((page - 1) * limit) >= productCount) throw new Error("This Page does not exists");
+    }
+
+    const product = await Product.find(filter,{
+      createdAt: 0,
+      updatedAt: 0,
+      __v: 0,
     }).sort({createdAt: -1}).skip((page - 1) * limit).limit(limit);;
     return product;
   } catch (error) {
@@ -212,4 +236,5 @@ module.exports = {
   getProductCategory,
   getProductRoom,
   searchProduct,
+  getAllProductAdmin
 };

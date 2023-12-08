@@ -7,7 +7,8 @@ const {
   deleteProduct,
   getProductCategory,
   getProductRoom,
-  searchProduct
+  searchProduct,
+  getAllProductAdmin
 } = require("../controllers/product.controller");
 const { isAdmin, authMiddleware } = require("../middlewares/authMiddleware");
 const router = express.Router();
@@ -22,6 +23,8 @@ router.put("/updateProduct/:_id", authMiddleware, isAdmin, updateProduct);
 router.delete("/:id", authMiddleware, isAdmin, deleteProduct);
 
 router.get("/getAllProduct", getAllProduct);
+
+router.get("/admin/getAll",authMiddleware, isAdmin, getAllProductAdmin);
 
 router.get("/search/:s", searchProduct);
 

@@ -54,6 +54,15 @@ const getAllProduct = asyncHandler(async (req, res) => {
   })
 });
 
+const getAllProductAdmin = asyncHandler(async (req, res) => {
+  const data = await productService.getAllProductAdmin(req);
+  res.json({
+    status: "success",
+    data,
+    message: "",
+  })
+});
+
 const searchProduct = asyncHandler(async (req, res) => {
   const data = await productService.searchProduct(req);
   res.json({
@@ -94,5 +103,6 @@ module.exports = {
   deleteProduct,
   getProductCategory,
   getProductRoom,
-  searchProduct
+  searchProduct,
+  getAllProductAdmin
 };
