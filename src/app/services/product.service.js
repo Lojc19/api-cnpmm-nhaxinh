@@ -108,8 +108,9 @@ const getAllProduct = asyncHandler(async (req) => {
     {
       filter = {...filter, room: req.body.room}
     }
+    let productCount = 0
     if (req.body.page) {
-      const productCount = await Product.countDocuments();
+      productCount = await Product.countDocuments(filter);
       if (((page - 1) * limit) >= productCount) throw new Error("This Page does not exists");
     }
 
@@ -120,7 +121,11 @@ const getAllProduct = asyncHandler(async (req) => {
       __v: 0,
       enable: 0,
     }).sort({createdAt: -1}).skip((page - 1) * limit).limit(limit);;
-    return product;
+    const data = {
+      total: productCount,
+      product,
+    }
+    return data;
   } catch (error) {
     throw new Error(error);
   }
