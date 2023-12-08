@@ -134,11 +134,11 @@ const getAllProduct = asyncHandler(async (req) => {
     }
 
     let productCount = 0
+    productCount = await Product.countDocuments(filter);
     if (req.body.page) {
-      productCount = await Product.countDocuments(filter);
       if (((page - 1) * limit) >= productCount) throw new Error("This Page does not exists");
     }
-
+    console.log(productCount)
     const product = await Product.find(filter,{
       sold: 0,
       createdAt: 0,
