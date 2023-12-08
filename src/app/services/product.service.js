@@ -100,10 +100,31 @@ const getAllProduct = asyncHandler(async (req) => {
     let filter = {
       enable: true,
     }
-    let sort = { }
-    if(req.body.price)
+    let sort = {}
+    
+    console.log(req.body.specs.k)
+
+    /// sort
+    if(req.body.sort_popular)
     {
-      sort = {...filter, price: req.body.sort};
+      sort = {...sort, sold: -1};
+    }
+    if(req.body.sort_price)
+    {
+      if(req.body.sort_price == "desc")
+      {
+        sort = {...sort, priceSale: -1};
+      }
+      if(req.body.sort_price == "asc")
+      {
+        sort = {...sort, priceSale: 1};
+      }
+    }
+
+    // filter
+    if(req.body.specs)
+    {
+      filter = {...filter, specs: { $elemMatch: { k: req.body.specs.k, v: req.body.specs.v }}}
     }
     if(req.body.category)
     {
@@ -113,6 +134,7 @@ const getAllProduct = asyncHandler(async (req) => {
     {
       filter = {...filter, room: req.body.room};
     }
+
     let productCount = 0
     if (req.body.page) {
       productCount = await Product.countDocuments(filter);
@@ -125,7 +147,7 @@ const getAllProduct = asyncHandler(async (req) => {
       updatedAt: 0,
       __v: 0,
       enable: 0,
-    }).sort({createdAt: -1}).skip((page - 1) * limit).limit(limit);;
+    }).sort(sort).skip((page - 1) * limit).limit(limit);;
     const data = {
       total: productCount,
       product,
