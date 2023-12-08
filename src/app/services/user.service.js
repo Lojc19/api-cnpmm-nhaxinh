@@ -297,7 +297,7 @@ const addToWishlist = asyncHandler(async (req) => {
           new: true,
         }
       );
-      return
+      return prodId
     } else {
       let user = await User.findByIdAndUpdate(
         _id,
@@ -308,7 +308,7 @@ const addToWishlist = asyncHandler(async (req) => {
           new: true,
         }
       );
-      return
+      return prodId
     }
   } catch (error) {
     throw new Error(error);
