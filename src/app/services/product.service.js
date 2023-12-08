@@ -120,17 +120,17 @@ const getAllProduct = asyncHandler(async (req) => {
     }
 
     // filter
-    if(req.query.specs)
+    if(req.query.specs_k && req.query.specs_v)
     {
-      filter = {...filter, specs: { $elemMatch: { k: req.body.specs.k, v: req.body.specs.v }}}
+      filter = {...filter, specs: { $elemMatch: { k: req.query.specs_k, v: req.query.specs_v }}}
     }
     if(req.query.category)
     {
-      filter = {...filter, category: req.body.category};
+      filter = {...filter, category: req.query.category};
     }
     if(req.query.room)
     {
-      filter = {...filter, room: req.body.room};
+      filter = {...filter, room: req.query.room};
     }
 
     let productCount = 0
