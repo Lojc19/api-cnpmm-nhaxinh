@@ -19,7 +19,7 @@ const getaRoom = asyncHandler(async(id) => {
   const room = await Room.findById(id,{
     nameRoom: 1,
     _id: 0,
-  }).populate("categories", "nameCate icUrl");
+  }).populate("categories", "nameCate icUr");
   return room; 
 });
 
@@ -29,6 +29,7 @@ const getallRoom = asyncHandler(async() => {
       _id: 1,
       nameRoom: 1,
       icUrl: 1,
+      bgImage: 1,
     });
     return data; 
   } catch (error) {

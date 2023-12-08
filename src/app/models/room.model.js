@@ -10,6 +10,10 @@ var roomSchema = new mongoose.Schema({
         type: String,
         default: ""
     },
+    bgImage: {
+        type: String,
+        default: ""
+    },
     categories: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Category",
