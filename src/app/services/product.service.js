@@ -94,8 +94,8 @@ const searchProduct = asyncHandler(async (req) => {
 const getAllProduct = asyncHandler(async (req) => {
   try {
     // pagination
-    let page = req.body.page || 1;
-    let limit = req.body.limit || 20;
+    let page = req.query.page || 1;
+    let limit = req.query.limit || 20;
 
     let filter = {
       enable: true,
@@ -103,42 +103,41 @@ const getAllProduct = asyncHandler(async (req) => {
     let sort = {}
     
     /// sort
-    if(req.body.sort_popular)
+    if(req.query.sort_popular)
     {
       sort = {...sort, sold: -1};
     }
-    if(req.body.sort_price)
+    if(req.query.sort_price)
     {
-      if(req.body.sort_price == "desc")
+      if(req.query.sort_price == "desc")
       {
         sort = {...sort, priceSale: -1};
       }
-      if(req.body.sort_price == "asc")
+      if(req.query.sort_price == "asc")
       {
         sort = {...sort, priceSale: 1};
       }
     }
 
     // filter
-    if(req.body.specs)
+    if(req.query.specs)
     {
       filter = {...filter, specs: { $elemMatch: { k: req.body.specs.k, v: req.body.specs.v }}}
     }
-    if(req.body.category)
+    if(req.query.category)
     {
       filter = {...filter, category: req.body.category};
     }
-    if(req.body.room)
+    if(req.query.room)
     {
       filter = {...filter, room: req.body.room};
     }
 
     let productCount = 0
     productCount = await Product.countDocuments(filter);
-    if (req.body.page) {
+    if (req.query.page) {
       if (((page - 1) * limit) >= productCount) throw new Error("This Page does not exists");
     }
-    console.log(productCount)
     const product = await Product.find(filter,{
       sold: 0,
       createdAt: 0,
