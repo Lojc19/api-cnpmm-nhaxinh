@@ -102,8 +102,6 @@ const getAllProduct = asyncHandler(async (req) => {
     }
     let sort = {}
     
-    console.log(req.body.specs.k)
-
     /// sort
     if(req.body.sort_popular)
     {
