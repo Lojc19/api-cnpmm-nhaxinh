@@ -35,9 +35,8 @@ const deleteProduct = asyncHandler(async (req, res) => {
 });
 
 const getaProduct = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-  validateMongoDbId(id);
-  const data = await productService.getaProduct(id);
+  const { slug } = req.params;
+  const data = await productService.getaProduct(slug);
   res.json({
     status: "success",
     data,
