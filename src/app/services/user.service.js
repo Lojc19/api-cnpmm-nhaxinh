@@ -273,7 +273,7 @@ const deleteaUser = asyncHandler(async (req, res) => {
 const getWishlist = asyncHandler(async (req) => {
   const { _id } = req.user;
   try {
-    const findUser = await User.findById(_id).populate({path: "wishlist", select:'_id name images price priceSale'});
+    const findUser = await User.findById(_id).populate({path: "wishlist", select:'_id code name slug description shortDescription images price sale priceSale quantity totalrating'});
     const data = findUser.wishlist;
     return data;
   } catch (error) {
@@ -287,11 +287,11 @@ const addToWishlist = asyncHandler(async (req) => {
   try {
     const user = await User.findById(_id);
     const product = await Product.findById(prodId, {
-      _id: 1,
-      name: 1,
-      images: 1,
-      price: 1,
-      priceSale: 1,
+      sold: 0,
+      createdAt: 0,
+      updatedAt: 0,
+      __v: 0,
+      enable: 0,
     });
     const alreadyadded = user.wishlist.find((id) => id.toString() === prodId);
     if (alreadyadded) {
