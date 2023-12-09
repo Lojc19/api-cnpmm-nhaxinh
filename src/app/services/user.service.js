@@ -304,7 +304,7 @@ const addToWishlist = asyncHandler(async (req) => {
           new: true,
         }
       );
-      return product
+      return "Bỏ yêu thích thành công"
     } else {
       let user = await User.findByIdAndUpdate(
         _id,
@@ -315,7 +315,7 @@ const addToWishlist = asyncHandler(async (req) => {
           new: true,
         }
       );
-      return product
+      return "Yêu thích thành công"
     }
   } catch (error) {
     throw new Error(error);

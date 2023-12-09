@@ -138,11 +138,10 @@ const deleteaUser = asyncHandler(async (req, res) => {
 });
 
 const addToWishlist = asyncHandler(async (req, res) => {
-  const data = await userService.addToWishlist(req);
+  const message = await userService.addToWishlist(req);
   res.json({
     status: "success",
-    data,
-    message: "",
+    message,
   });
 });
 

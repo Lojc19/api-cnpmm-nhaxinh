@@ -95,7 +95,7 @@ const getAllProduct = asyncHandler(async (req) => {
   try {
     // pagination
     let page = req.query.page || 1;
-    let limit = req.query.limit || 20;
+    let limit = req.query.limit || 100;
 
     let filter = {
       enable: true,
@@ -191,12 +191,11 @@ const getAllProductAdmin = asyncHandler(async (req) => {
 const getProductCategory = asyncHandler(async (id) => {
   try {
     const products = await Product.find({category: id, enable: true}, {
-      ratings: 0,
       sold: 0,
       createdAt: 0,
       updatedAt: 0,
-      realease_date: 0,
       __v: 0,
+      enable: 0,
       enable: 0,
     }).sort({createdAt: -1}).populate("category", "nameCate").populate("room", "nameRoom icUrl");
     return products;
@@ -208,13 +207,11 @@ const getProductCategory = asyncHandler(async (id) => {
 const getProductRoom = asyncHandler(async (id) => {
   try {
     const product = await Product.find({room: id, enable: true},{
-        ratings: 0,
-        sold: 0,
-        createdAt: 0,
-        updatedAt: 0,
-        realease_date: 0,
-        __v: 0,
-        enable: 0,
+      sold: 0,
+      createdAt: 0,
+      updatedAt: 0,
+      __v: 0,
+      enable: 0,
       }).sort({createdAt: -1}).populate("category", "nameCate").populate("room", "nameRoom");
     return product;
   } catch (error) {
@@ -222,39 +219,6 @@ const getProductRoom = asyncHandler(async (id) => {
   }
 });
 
-const addToWishlist = asyncHandler(async (req, res) => {
-  const { _id } = req.user;
-  const { prodId } = req.body;
-  try {
-    const user = await User.findById(_id);
-    const alreadyadded = user.wishlist.find((id) => id.toString() === prodId);
-    if (alreadyadded) {
-      let user = await User.findByIdAndUpdate(
-        _id,
-        {
-          $pull: { wishlist: prodId },
-        },
-        {
-          new: true,
-        }
-      );
-      res.json(user);
-    } else {
-      let user = await User.findByIdAndUpdate(
-        _id,
-        {
-          $push: { wishlist: prodId },
-        },
-        {
-          new: true,
-        }
-      );
-      res.json(user);
-    }
-  } catch (error) {
-    throw new Error(error);
-  }
-});
 
 module.exports = {
   createProduct,
@@ -262,7 +226,6 @@ module.exports = {
   getAllProduct,
   updateProduct,
   deleteProduct,
-  addToWishlist,
   getProductCategory,
   getProductRoom,
   searchProduct,
