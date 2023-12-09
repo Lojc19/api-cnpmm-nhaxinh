@@ -144,7 +144,7 @@ const getAllProduct = asyncHandler(async (req) => {
       updatedAt: 0,
       __v: 0,
       enable: 0,
-    }).sort(sort).skip((page - 1) * limit).limit(limit);;
+    }).sort(sort).skip((page - 1) * limit).limit(limit).populate("category", "nameCate").populate("room", "nameRoom");;
     const data = {
       total: productCount,
       product,
