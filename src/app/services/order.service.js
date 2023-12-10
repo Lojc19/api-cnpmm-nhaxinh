@@ -34,7 +34,7 @@ const createOrder = asyncHandler(async (req) => {
             note: req.body?.addressShipping.note,
         },
         total: finalTotal,
-        coupon: coupon._id || null,
+        coupon: coupon._id || undefined,
         orderby: user._id,
         orderStatus: "Processing",
       }).save();

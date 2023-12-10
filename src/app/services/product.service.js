@@ -68,6 +68,8 @@ const getaProduct = asyncHandler(async (slug) => {
       createdAt: 0,
       updatedAt: 0,
       __v: 0,
+      sold: 0,
+      enable: 0,
     }).sort({createdAt: -1}).populate("category", "nameCate icUrl").populate("room", "nameRoom");
     return findProduct;
   } catch (error) {
@@ -195,7 +197,6 @@ const getProductCategory = asyncHandler(async (id) => {
       createdAt: 0,
       updatedAt: 0,
       __v: 0,
-      enable: 0,
       enable: 0,
     }).sort({createdAt: -1}).populate("category", "nameCate").populate("room", "nameRoom icUrl");
     return products;
