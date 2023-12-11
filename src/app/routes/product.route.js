@@ -15,7 +15,7 @@ const router = express.Router();
 
 router.post("/create-product", authMiddleware, isAdmin, createProduct);
 
-router.get("/product-detail/:slug", getaProduct);
+router.get("/product-detail/:_id", getaProduct);
 router.get("/category/:id", getProductCategory);
 router.get("/room/:id", getProductRoom);
 
