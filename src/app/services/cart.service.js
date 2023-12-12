@@ -21,13 +21,25 @@ const addtoCart = asyncHandler(async (req) => {
         if (itemIndex > -1) {
           //product exists in the cart, update the quantity
           let productItem = cart.products[itemIndex];
-          productItem.quantity = productItem.quantity + quantity;
-          productItem.totalPriceItem = product.priceSale * productItem.quantity;
-          cart.products[itemIndex] = productItem;
+          if(productItem.quantity + quantity <= product.quantity)
+          {
+            productItem.quantity = productItem.quantity + quantity;
+            productItem.totalPriceItem = product.priceSale * productItem.quantity;
+            cart.products[itemIndex] = productItem;
+          }
+          else {
+            throw new Error("Số lượng không khả dụng")
+          }
         } else {
+          if(quantity <= product.quantity)
+          {
             totalPriceItem = product.priceSale * quantity;
             //product does not exists in cart, add new item
             cart.products.push({ product, quantity, totalPriceItem});
+          }
+          else {
+            throw new Error("Số lượng không khả dụng")
+          }
         }
         let cartTotal = 0;
         for (let i = 0; i < cart.products.length; i++) {
