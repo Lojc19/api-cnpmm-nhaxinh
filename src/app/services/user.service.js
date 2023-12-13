@@ -57,6 +57,7 @@ const loginUser = asyncHandler(async (req, res) => {
     });
     const data = {
       token: generateToken(findUser?._id),
+      role: findUser.role,
     }
     return data
   } else {
