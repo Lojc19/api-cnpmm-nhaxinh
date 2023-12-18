@@ -31,4 +31,21 @@ const getallRoom = asyncHandler(async (req, res) => {
   })
 });
 
-module.exports = {createRoom, getaRoom, getallRoom};
+const updateRoom = asyncHandler(async (req, res) => {
+  const data = await roomService.updateRoom(req);
+  res.json({
+    status: "success",
+    data,
+    message: "Update thành công"
+  })
+});
+
+const deleteRoom = asyncHandler(async (req, res) => {
+  const data = await roomService.deleteRoom(req);
+  res.json({
+    status: "success",
+    message: "Xóa thành công"
+  })
+});
+
+module.exports = {createRoom, getaRoom, getallRoom, updateRoom, deleteRoom};

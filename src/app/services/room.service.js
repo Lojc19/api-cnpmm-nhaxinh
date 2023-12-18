@@ -37,4 +37,31 @@ const getallRoom = asyncHandler(async() => {
   }
 });
 
-module.exports = { createRoom, getaRoom, getallRoom };
+const updateRoom = asyncHandler(async(req) => {
+  try {
+    const updateRoom = await Room.findByIdAndUpdate(
+      req.params._id,
+      {
+        nameRoom: req.body?.nameRoom,
+        icUrl: req.body?.icUrl,
+      },
+      {
+        new: true,
+      }
+    );
+    return updateRoom;
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+const deleteRoom = asyncHandler(async(req) => {
+  try {
+    const deleteRoom = await Room.findByIdAndDelete(req.params._id);
+    return deleteRoom;
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+module.exports = { createRoom, getaRoom, getallRoom, updateRoom, deleteRoom };

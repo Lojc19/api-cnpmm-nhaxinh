@@ -15,7 +15,7 @@ const createCate = asyncHandler(async (reqBody) => {
       });
     if(reqBody.roomId)
     {
-      const findRoom = await Room.findById(reqBody.roomId);
+      let findRoom = await Room.findById(reqBody.roomId);
       findRoom.categories.push(newCategory._id);
       findRoom.save();
     }
@@ -51,4 +51,42 @@ const getallCategory = asyncHandler(async() => {
   }
 });
 
-module.exports = { createCate, getaCategory, getallCategory };
+const updateCategory = asyncHandler(async(req) => {
+  try {
+    const updateCategory = await Category.findByIdAndUpdate(
+      req.params._id,
+      {
+        nameCate: req.body?.nameCate,
+        icUrl: req.body?.icUrl,
+      },
+      {
+        new: true,
+      }
+    );
+    if(req.body.roomId)
+    {
+      let findRoom = await Room.findById(req.body.roomId);
+      findRoom.categories.push(updateCategory._id);
+      findRoom.save();
+    }
+    return updateCategory;
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+const deleteCategory = asyncHandler(async(req) => {
+  try {
+    const deleteCategory = await Category.findByIdAndDelete(req.params._id);
+    let findRoom = await Room.updateMany(
+      {categories: req.params._id},
+      { $pull: { categories: req.params._id } },
+      { new: true }
+      );
+    return deleteCategory;
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+module.exports = { createCate, getaCategory, getallCategory, updateCategory, deleteCategory };

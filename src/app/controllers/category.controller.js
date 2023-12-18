@@ -31,4 +31,22 @@ const getallCategory = asyncHandler(async (req, res) => {
 });
 
 
-module.exports = {createCate, getaCategory, getallCategory};
+const updateCategory = asyncHandler(async (req, res) => {
+  const data = await cateService.updateCategory(req);
+  res.json({
+    status: "success",
+    data,
+    message: "Update thành công"
+  })
+});
+
+const deleteCategory = asyncHandler(async (req, res) => {
+  const data = await cateService.deleteCategory(req);
+  res.json({
+    status: "success",
+    message: "Xóa thành công"
+  })
+});
+
+
+module.exports = {createCate, getaCategory, getallCategory, updateCategory, deleteCategory};

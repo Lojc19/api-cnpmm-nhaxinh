@@ -1,5 +1,5 @@
 const express = require("express");
-const { createRoom, getaRoom, getallRoom} = require("../controllers/room.controller");
+const { createRoom, getaRoom, getallRoom, updateRoom, deleteRoom} = require("../controllers/room.controller");
 const { authMiddleware, isAdmin } = require("../middlewares/authMiddleware"); 
 const router = express.Router();
 
@@ -7,6 +7,10 @@ const router = express.Router();
 router.post("/create-room",authMiddleware, isAdmin, createRoom);
 
 router.get("/getCateByRoom/:id", getaRoom);
+
+router.put("/:_id",authMiddleware, isAdmin, updateRoom);
+
+router.delete("/:_id",authMiddleware, isAdmin, deleteRoom);
 
 router.get("/all", getallRoom);
 
