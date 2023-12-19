@@ -1,5 +1,7 @@
 const Category = require("../models/category.model");
 const Room = require("../models/room.model");
+const Product = require("../models/product.model");
+
 const asyncHandler = require('express-async-handler');
 const validateMongoDbId = require("../../utils/validateMongodbId");
 
@@ -82,7 +84,14 @@ const deleteCategory = asyncHandler(async(req) => {
       {categories: req.params._id},
       { $pull: { categories: req.params._id } },
       { new: true }
-      );
+    );
+
+    let findProduct = await Product.updateMany(
+      {category: req.params._id},
+      { $pull: { category: req.params._id } },
+      { new: true }
+    );
+
     return deleteCategory;
   } catch (error) {
     throw new Error(error);

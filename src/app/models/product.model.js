@@ -35,12 +35,10 @@ var productSchema = new mongoose.Schema(
     ],
     category: {
       type: mongoose.Schema.Types.ObjectId,
-      require: true,
       ref: "Category"
     },
     room: {
       type: mongoose.Schema.Types.ObjectId,
-      require: true,
       ref: "Room"
     },
     specs: [

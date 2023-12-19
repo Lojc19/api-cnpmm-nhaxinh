@@ -122,6 +122,16 @@ const updatedUser = asyncHandler(async (req, res) => {
   });
 });
 
+
+const updatedUserAdmin = asyncHandler(async (req, res) => {
+  const data = await userService.updatedUserAdmin(req);
+  res.json({
+    status: "success",
+    data,
+    message: "Cập nhật thông tin thành công",
+  });
+});
+
 // delete user
 const deleteaUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
@@ -154,4 +164,4 @@ const getWishlist = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = {createUser, loginUser, loginAdmin, getallUser, getaUser, updatedUser, deleteaUser, handleRefreshToken, logout, updatePassword, forgotPasswordToken, resetPassword, addToWishlist, getWishlist, getaUserAdmin};
+module.exports = {createUser, loginUser, loginAdmin, getallUser, getaUser, updatedUser, deleteaUser, handleRefreshToken, logout, updatePassword, forgotPasswordToken, resetPassword, addToWishlist, getWishlist, getaUserAdmin, updatedUserAdmin};

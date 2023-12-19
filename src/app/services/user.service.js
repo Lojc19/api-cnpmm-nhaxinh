@@ -256,6 +256,28 @@ const updatedUser = asyncHandler(async (_id,reqBody) => {
   }
 });
 
+// update user admin
+const updatedUserAdmin = asyncHandler(async (req) => {
+  try {
+    if(req.body.role != "staff" && req.body.role != "customer")
+    {
+      throw new Error("Role không khả dụng")
+    }
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params._id,
+      {
+        role: req.body?.role
+      },
+      {
+        new: true,
+      }
+    );
+    return updatedUser;
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
 // delete user
 const deleteaUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
@@ -323,4 +345,4 @@ const addToWishlist = asyncHandler(async (req) => {
   }
 });
 
-module.exports = {createUser, loginUser, getallUser, getaUser, updatedUser, deleteaUser, handleRefreshToken, logout, updatePassword, forgotPasswordToken, resetPassword, addToWishlist, getWishlist, loginAdmin, getaUserAdmin};
+module.exports = {createUser, loginUser, getallUser, getaUser, updatedUser, deleteaUser, handleRefreshToken, logout, updatePassword, forgotPasswordToken, resetPassword, addToWishlist, getWishlist, loginAdmin, getaUserAdmin, updatedUserAdmin};

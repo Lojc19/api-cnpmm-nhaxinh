@@ -28,4 +28,6 @@ router.get("/admin/getAll",authMiddleware, isAdmin, getAllProductAdmin);
 
 router.get("/search/:s", searchProduct);
 
+router.post("/updateImage/:_id", searchProduct);
+
 module.exports = router;
