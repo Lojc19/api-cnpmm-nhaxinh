@@ -29,7 +29,6 @@ const getallRoom = asyncHandler(async() => {
       _id: 1,
       nameRoom: 1,
       icUrl: 1,
-      bgImage: 1,
     });
     return data; 
   } catch (error) {

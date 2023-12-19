@@ -146,7 +146,7 @@ const getAllProduct = asyncHandler(async (req) => {
       updatedAt: 0,
       __v: 0,
       enable: 0,
-    }).sort(sort).skip((page - 1) * limit).limit(limit).populate("category", "nameCate").populate("room", "nameRoom");;
+    }).sort(sort).skip((page - 1) * limit).limit(limit).populate("category", "nameCate").populate("room", "nameRoom icUrl");;
     const data = {
       total: productCount,
       product,
@@ -182,7 +182,7 @@ const getAllProductAdmin = asyncHandler(async (req) => {
       createdAt: 0,
       updatedAt: 0,
       __v: 0,
-    }).sort({createdAt: -1}).populate("category", "nameCate").populate("room", "nameRoom");
+    }).sort({createdAt: -1}).populate("category", "nameCate").populate("room", "nameRoom icUrl");
     // skip((page - 1) * limit).limit(limit);;
     return product;
   } catch (error) {
