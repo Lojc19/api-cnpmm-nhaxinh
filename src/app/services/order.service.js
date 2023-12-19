@@ -11,7 +11,8 @@ const createOrder = asyncHandler(async (req) => {
     const { _id } = req.user;
     try {
       const user = await User.findById(_id);
-      let userCart = await Cart.findOne({ userId: user._id });
+      let userCart = await Cart.findOne({ userId: user._id }).populate({path: "products.product", select:'name quantity'});
+      console.log(userCart.products)
       let finalTotal = 0;
       let coupon = "";
       if (couponApplied) {
@@ -19,6 +20,13 @@ const createOrder = asyncHandler(async (req) => {
         finalTotal = userCart.cartTotal - userCart.cartTotal * coupon.discount / 100;
       } else {
         finalTotal = userCart.cartTotal;
+      }
+
+      for (let i = 0; i < userCart.products.length; i++) {
+        if(userCart.products[i].product.quantity < userCart.products[i].quantity)
+        {
+          throw new Error("Sản phẩm " + `${userCart.products[i].product.name}` + " số lượng không khả dụng" ); 
+        }
       }
 
       let newOrder = await new Order({
@@ -120,6 +128,7 @@ const updateOrderStatusUser = asyncHandler(async (req) => {
         },
         { new: true }
       );
+      
       return
     } catch (error) {
       throw new Error(error);

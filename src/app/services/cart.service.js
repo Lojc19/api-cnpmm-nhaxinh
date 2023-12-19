@@ -50,6 +50,10 @@ const addtoCart = asyncHandler(async (req) => {
         const getcart = await getCart(req);
         return getcart;
       } else {
+        if(quantity > product.quantity)
+        {
+          throw new Error("Số lượng không khả dụng")
+        }
         totalPriceItem = product.priceSale * quantity;
         cartTotal = totalPriceItem;
         //no cart for user, create new cart

@@ -182,7 +182,7 @@ const getAllProductAdmin = asyncHandler(async (req) => {
       createdAt: 0,
       updatedAt: 0,
       __v: 0,
-    }).sort({createdAt: -1});
+    }).sort({createdAt: -1}).populate("category", "nameCate").populate("room", "nameRoom");
     // skip((page - 1) * limit).limit(limit);;
     return product;
   } catch (error) {
