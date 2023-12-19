@@ -80,7 +80,7 @@ const resetPassword = asyncHandler(async (req, res) => {
 
 // get all user
 const getallUser = asyncHandler(async (req, res) => {
-  const data = await userService.getallUser();
+  const data = await userService.getallUser(req);
   res.json({
     status: "success",
     data,

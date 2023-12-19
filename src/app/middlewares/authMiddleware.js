@@ -32,4 +32,14 @@ const isAdmin =  asyncHandler(async (req,res,next) => {
     }
 });
 
-module.exports = { authMiddleware, isAdmin };
+const isAdminStaff =  asyncHandler(async (req,res,next) => {
+    const { username } = req.user;
+    const user = await User.findOne({username});
+    if(user.role == "admin" || user.role == "staff" ) {
+        next();
+    } else {
+        throw new Error("You are not admin or staff");
+    }
+});
+
+module.exports = { authMiddleware, isAdmin, isAdminStaff };

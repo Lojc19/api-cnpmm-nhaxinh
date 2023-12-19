@@ -188,9 +188,33 @@ const handleRefreshToken = asyncHandler(async (req, res) => {
 });
 
 // get all user
-const getallUser = asyncHandler(async (req, res) => {
+const getallUser = asyncHandler(async (req) => {
   try {
-    const data = await User.find();
+    let data = [];
+    if(req.user.role == "admin")
+    {
+      data = await User.find({ role: { $in: ["customer", "staff"] } }, {
+        _id: 1,
+        firstname: 1,
+        lastname: 1,
+        email: 1,
+        username: 1,
+        phoneNumber: 1,
+        role: 1,
+      });
+    }
+    if(req.user.role == "staff")
+    {
+      data = await User.find({ role: "customer" }, {
+        _id: 1,
+        firstname: 1,
+        lastname: 1,
+        email: 1,
+        username: 1,
+        phoneNumber: 1,
+        role: 1,
+      });
+    }
     return data;
   } catch (error) {
     throw new Error(error);
@@ -227,6 +251,7 @@ const getaUserAdmin = asyncHandler(async (_id) => {
       email: 1,
       username: 1,
       phoneNumber: 1,
+      role: 1,
     });
     return findUser
   } catch (error) {
