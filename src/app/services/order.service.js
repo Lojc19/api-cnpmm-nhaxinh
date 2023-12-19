@@ -127,11 +127,11 @@ const updateOrderStatusUser = asyncHandler(async (req) => {
 });
 
 const updateOrderStatusAdmin = asyncHandler(async (req) => {
-    const { status } = req.body;
-    const { _id } = req.params;
-    if(status != "Processing" && status != "Dispatched" && status != "Cancelled" && status != "Delivered") throw new Error("Trạng thái không hợp lệ")
-
     try {
+      const { status } = req.body;
+      const { _id } = req.params;
+      if(status != "Processing" && status != "Dispatched" && status != "Cancelled" && status != "Delivered") throw new Error("Trạng thái không hợp lệ")
+
       await Order.findByIdAndUpdate(
         _id,
         {
