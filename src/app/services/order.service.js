@@ -104,13 +104,15 @@ const getOrderByUserId = asyncHandler(async (req) => {
 });
   
 const updateOrderStatusUser = asyncHandler(async (req) => {
-    const { status } = req.body;
-    const { _id } = req.params;
-    if(status != "Processing" && status != "Dispatched" && status != "Cancelled" && status != "Delivered") throw new Error("Trạng thái không hợp lệ")
-    let order = await Order.findOne({_id: _id});
-    if(status !== "Cancelled") throw new Error("Lỗi")
-    if(order.status == "Cancelled") throw new Error("Không chỉnh sửa được trạng thái đơn hàng")
     try {
+
+      const { status } = req.body;
+      const { _id } = req.params;
+      if(status != "Processing" && status != "Dispatched" && status != "Cancelled" && status != "Delivered") throw new Error("Trạng thái không hợp lệ")
+      let order = await Order.findOne({_id: _id});
+      if(status !== "Cancelled") throw new Error("Lỗi")
+      if(order.status == "Cancelled" || order.status != "Processing") throw new Error("Không chỉnh sửa được trạng thái đơn hàng")
+
       await Order.findByIdAndUpdate(
         _id,
         {
