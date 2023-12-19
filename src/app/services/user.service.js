@@ -193,27 +193,11 @@ const getallUser = asyncHandler(async (req) => {
     let data = [];
     if(req.user.role == "admin")
     {
-      data = await User.find({ role: { $in: ["customer", "staff"] } }, {
-        _id: 1,
-        firstname: 1,
-        lastname: 1,
-        email: 1,
-        username: 1,
-        phoneNumber: 1,
-        role: 1,
-      });
+      data = await User.find({ role: { $in: ["customer", "staff"] } });
     }
     if(req.user.role == "staff")
     {
-      data = await User.find({ role: "customer" }, {
-        _id: 1,
-        firstname: 1,
-        lastname: 1,
-        email: 1,
-        username: 1,
-        phoneNumber: 1,
-        role: 1,
-      });
+      data = await User.find({ role: "customer" });
     }
     return data;
   } catch (error) {
