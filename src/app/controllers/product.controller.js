@@ -93,6 +93,14 @@ const getProductRoom = asyncHandler(async (req, res) => {
   });
 });
 
+const uploadImageProduct = asyncHandler(async (req, res) => {
+  const data = await productService.uploadImageProduct(req);
+  res.json({
+    status:"success",
+    data,
+    message: "",
+  });
+});
 
 module.exports = {
   createProduct,
@@ -103,5 +111,6 @@ module.exports = {
   getProductCategory,
   getProductRoom,
   searchProduct,
-  getAllProductAdmin
+  getAllProductAdmin,
+  uploadImageProduct
 };

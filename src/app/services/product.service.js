@@ -3,6 +3,7 @@ const User = require("../models/user.model");
 const asyncHandler = require("express-async-handler");
 const validateMongoDbId = require("../../utils/validateMongodbId");
 const slugify = require("slugify");
+const {deleteImages} = require("../../config/cloudinary");
 
 const createProduct = asyncHandler(async (req) => {
   try {
@@ -15,17 +16,19 @@ const createProduct = asyncHandler(async (req) => {
       slug: req.body.slug,
       description: req.body.description,
       shortDescription: req.body.shortDescription,
-      images: req.body.images,
+      images: req.files.map(item => ({ url: item.path })),
+      // images: req.body.images,
       category: req.body.category,
       room: req.body.room,
-      specs: req.body.specs,
+      specs: JSON.parse(req.body.specs),
       price: req.body.price,
       priceSale: req.body.price,
       quantity: req.body.quantity
     });
     return productNew;
   } catch (error) {
-    throw new Error(error);
+    deleteImages(req.files)
+    throw new Error("Thêm sản phẩm không thành công hãy kiểm tra lại code, name, hoặc xem có thiếu dữ liệu ở thuộc tính nào không");
   }
 });
 
@@ -220,6 +223,15 @@ const getProductRoom = asyncHandler(async (id) => {
   }
 });
 
+const uploadImageProduct = asyncHandler(async (req) => {
+  try {
+    console.log(req.file)
+    return "Ok"
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
 
 module.exports = {
   createProduct,
@@ -230,5 +242,6 @@ module.exports = {
   getProductCategory,
   getProductRoom,
   searchProduct,
-  getAllProductAdmin
+  getAllProductAdmin,
+  uploadImageProduct
 };
