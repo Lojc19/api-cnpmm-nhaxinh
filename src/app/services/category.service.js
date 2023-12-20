@@ -13,7 +13,6 @@ const createCate = asyncHandler(async (reqBody) => {
     const newCategory = await Category.create(
       {
         nameCate: reqBody.nameCate,
-        icUrl: reqBody.icUrl
       });
     if(reqBody.roomId)
     {
@@ -32,7 +31,6 @@ const getaCategory = asyncHandler(async(id) => {
     const cate = await Category.findById(id, {
       _id: 1,
       nameCate: 1,
-      icUrl: 1,
     });
     return cate; 
   } catch (error) {
@@ -45,7 +43,6 @@ const getallCategory = asyncHandler(async() => {
     const data = await Category.find({},{
       _id: 1,
       nameCate: 1,
-      icUrl: 1,
     });
     return data; 
   } catch (error) {
@@ -59,7 +56,6 @@ const updateCategory = asyncHandler(async(req) => {
       req.params._id,
       {
         nameCate: req.body?.nameCate,
-        icUrl: req.body?.icUrl,
       },
       {
         new: true,
