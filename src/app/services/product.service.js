@@ -28,7 +28,7 @@ const createProduct = asyncHandler(async (req) => {
     return productNew;
   } catch (error) {
     deleteImages(req.files)
-    throw new Error("Thêm sản phẩm không thành công hãy kiểm tra lại code, name, hoặc xem có thiếu dữ liệu ở thuộc tính nào không");
+    throw new Error(error);
   }
 });
 
