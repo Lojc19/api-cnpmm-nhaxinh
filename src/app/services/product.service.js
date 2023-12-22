@@ -41,12 +41,28 @@ const updateProduct = asyncHandler(async (req) => {
     await Product.findOneAndUpdate({_id: _id}, dataUpdate, {
       new: true,
     });
-    if(dataUpdate.sale != 0){
-      product.priceSale = product.price * ((100 - dataUpdate.sale) / 100);
+
+    if(dataUpdate.price)
+    {
+      if(dataUpdate.sale)
+      {
+        console.log("o day ne")
+        product.priceSale = dataUpdate.price * ((100 - dataUpdate.sale) / 100);
+      }
+      else {
+        product.priceSale = dataUpdate.price;
+      }
     }
     else {
-      product.priceSale = product.price;
+      if(dataUpdate.sale != 0)
+      {
+        product.priceSale = product.price * ((100 - dataUpdate.sale) / 100);
+      }
+      else {
+        product.priceSale = product.price;
+      }
     }
+
     await product.save()
     return null
   } catch (error) {
