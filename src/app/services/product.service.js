@@ -16,7 +16,7 @@ const createProduct = asyncHandler(async (req) => {
       slug: req.body.slug,
       description: req.body.description,
       shortDescription: req.body.shortDescription,
-      // images: req.files.map(item => ({ url: item.path })),
+      images: req.files.map(item => ({ url: item.path })),
       // images: req.body.images,
       category: req.body.category,
       room: req.body.room,
@@ -28,7 +28,7 @@ const createProduct = asyncHandler(async (req) => {
     return productNew;
   } catch (error) {
     deleteImages(req.files)
-    throw new Error(error);
+    throw new Error("Thêm sản phẩm thất bại kiểm tra lại code, name hoặc thiếu thông tin nào không");
   }
 });
 
