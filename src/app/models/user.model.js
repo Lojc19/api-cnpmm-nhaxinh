@@ -48,6 +48,7 @@ var userSchema = new mongoose.Schema({
     },
     passwordChangedAt: Date,
     passwordResetToken: String,
+    otpResetPassword: String,
     passwordResetExpires: Date,
 }, {
     collection: "users",
@@ -75,6 +76,14 @@ userSchema.methods.createPasswordResetToken = async function () {
     this.passwordResetExpires = Date.now() + 30 * 60 * 1000; // 10 minutes
     return resettoken;
 };
+userSchema.methods.createOTPResetPassword = async function () {
+    const otpResetPassword = Math.floor(100000 + Math.random() * 900000); // Số ngẫu nhiên 6 chữ số
+    this.otpResetPassword = otpResetPassword.toString();
+    this.passwordResetExpires = Date.now() + 5 * 60 * 1000; // 5 phút
+  
+    return otpResetPassword;
+  };
+
 
 //Export the model
 module.exports = mongoose.model('User', userSchema);

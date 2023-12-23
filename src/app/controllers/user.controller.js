@@ -58,9 +58,9 @@ const updatePassword = asyncHandler(async (req,res) => {
   })
 });
 
-const forgotPasswordToken = asyncHandler(async (req, res) => {
+const forgotPasswordOTP = asyncHandler(async (req, res) => {
   try {
-    await userService.forgotPasswordToken(req,res);
+    await userService.forgotPasswordOTP(req,res);
   } catch (error) {
     throw new Error(error);
   }
@@ -164,4 +164,4 @@ const getWishlist = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = {createUser, loginUser, loginAdmin, getallUser, getaUser, updatedUser, deleteaUser, handleRefreshToken, logout, updatePassword, forgotPasswordToken, resetPassword, addToWishlist, getWishlist, getaUserAdmin, updatedUserAdmin};
+module.exports = {createUser, loginUser, loginAdmin, getallUser, getaUser, updatedUser, deleteaUser, handleRefreshToken, logout, updatePassword, forgotPasswordOTP, resetPassword, addToWishlist, getWishlist, getaUserAdmin, updatedUserAdmin};

@@ -135,22 +135,23 @@ const updatePassword = asyncHandler(async (req) => {
   }
 });
 
-const forgotPasswordToken = asyncHandler(async (req, res) => {
+const forgotPasswordOTP = asyncHandler(async (req, res) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
   if (!user) throw new Error("User not found with this email");
   try {
-    const token = await user.createPasswordResetToken();
+    // const token = await user.createPasswordResetToken();
+    const otpCode = await user.createOTPResetPassword();
     await user.save();
-    const resetURL = `Hello, Please follow this link to reset Your Password. This link is valid till 10 minutes from now. <a href='http://localhost:3000/api/user/reset-password/${token}'>Click Here</>`;
+    // const resetURL = `Hello, Please follow this link to reset Your Password. This link is valid till 10 minutes from now. <a href='http://localhost:3000/api/user/reset-password/${token}'>Click Here</>`;
+
     const data = {
       to: email,
       text: "Hey User",
-      subject: "Forgot Password Link",
-      link:  resetURL,
+      subject: "Forgot Password OTP",
+      link:  otpCode.toString(),
     };
     sendEmail(data);
-    res.json(token);
   } catch (error) {
     throw new Error(error);
   }
@@ -158,15 +159,14 @@ const forgotPasswordToken = asyncHandler(async (req, res) => {
 
 const resetPassword = asyncHandler(async (req, res) => {
   const { password } = req.body;
-  const { token } = req.params;
-  const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+  const otpCode = req.body.otpCode;
   const user = await User.findOne({
-    passwordResetToken: hashedToken,
+    otpResetPassword: otpCode,
     passwordResetExpires: { $gt: Date.now() },
   });
-  if (!user) throw new Error(" Token Expired, Please try again later");
+  if (!user) throw new Error(" Otp Expired, Please try again later");
   user.password = password;
-  user.passwordResetToken = undefined;
+  user.otpResetPassword = undefined;
   user.passwordResetExpires = undefined;
   await user.save();
   return user;
@@ -354,4 +354,4 @@ const addToWishlist = asyncHandler(async (req) => {
   }
 });
 
-module.exports = {createUser, loginUser, getallUser, getaUser, updatedUser, deleteaUser, handleRefreshToken, logout, updatePassword, forgotPasswordToken, resetPassword, addToWishlist, getWishlist, loginAdmin, getaUserAdmin, updatedUserAdmin};
+module.exports = {createUser, loginUser, getallUser, getaUser, updatedUser, deleteaUser, handleRefreshToken, logout, updatePassword, forgotPasswordOTP, resetPassword, addToWishlist, getWishlist, loginAdmin, getaUserAdmin, updatedUserAdmin};
