@@ -17,6 +17,7 @@ const addressRouter = require('./src/app/routes/address.route');
 const couponRouter = require('./src/app/routes/coupon.route');
 const orderRouter = require('./src/app/routes/order.route');
 const reviewRouter = require('./src/app/routes/review.route');
+const statisticalRouter = require('./src/app/routes/statistical.route')
 
 
 const cookieParser = require("cookie-parser");
@@ -26,7 +27,7 @@ const { errorHandler, notFound } = require('./src/app/middlewares/errorHandler')
 
 db.connect();
 app.use(cors({
-  origin: ['https://cnpmm-admin.vercel.app','http://localhost:3000', 'https://cnpmm-tan.vercel.app'],
+  origin: ['http://localhost:3000'],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true
 }));
@@ -45,6 +46,7 @@ app.use("/api/address", addressRouter);
 app.use("/api/coupon", couponRouter);
 app.use("/api/order", orderRouter);
 app.use("/api/review", reviewRouter);
+app.use("/api/statistical", statisticalRouter)
 
 app.use(notFound);
 app.use(errorHandler);
