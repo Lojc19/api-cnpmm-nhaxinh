@@ -135,7 +135,7 @@ const updatePassword = asyncHandler(async (req) => {
   }
 });
 
-const forgotPasswordOTP = asyncHandler(async (req, res) => {
+const forgotPasswordOTP = asyncHandler(async (req) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
   if (!user) throw new Error("User not found with this email");
@@ -152,6 +152,7 @@ const forgotPasswordOTP = asyncHandler(async (req, res) => {
       link:  otpCode.toString(),
     };
     sendEmail(data);
+    return
   } catch (error) {
     throw new Error(error);
   }

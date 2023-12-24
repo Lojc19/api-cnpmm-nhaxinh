@@ -60,7 +60,11 @@ const updatePassword = asyncHandler(async (req,res) => {
 
 const forgotPasswordOTP = asyncHandler(async (req, res) => {
   try {
-    await userService.forgotPasswordOTP(req,res);
+    await userService.forgotPasswordOTP(req);
+    res.json({
+      status: "success",
+      message: "Đã gửi otp"
+    })
   } catch (error) {
     throw new Error(error);
   }
