@@ -10,6 +10,9 @@ const createProduct = asyncHandler(async (req) => {
     if (req.body.name) {
       req.body.slug = slugify(req.body.name);
     }
+    if(!req.files){
+      throw new Error("Miss input")
+    }
     const productNew = await Product.create({
       code: req.body.code,
       name: req.body.name,
@@ -23,12 +26,13 @@ const createProduct = asyncHandler(async (req) => {
       specs: JSON.parse(req.body.specs),
       price: req.body.price,
       priceSale: req.body.price,
-      quantity: req.body.quantity
+      quantity: req.body.quantity,
+      enable: req.body.enable,
     });
     return productNew;
   } catch (error) {
     deleteImages(req.files)
-    throw new Error("Thêm sản phẩm thất bại kiểm tra lại code, name hoặc thiếu thông tin nào không");
+    throw new Error(error);
   }
 });
 
@@ -38,7 +42,19 @@ const updateProduct = asyncHandler(async (req) => {
     const dataUpdate = req.body;
     validateMongoDbId(_id);
     let product = await Product.findById(_id);
-    await Product.findOneAndUpdate({_id: _id}, dataUpdate, {
+    await Product.findOneAndUpdate({_id: _id}, {
+      code: dataUpdate?.code,
+      name: dataUpdate?.firstname,
+      description: dataUpdate?.lastname,
+      shortDescription: dataUpdate?.email,
+      category: dataUpdate?.username,
+      room: dataUpdate?.phone,
+      $set: { specs: dataUpdate?.specs },
+      price: dataUpdate?.price,
+      sale: dataUpdate?.sale,
+      quantity: dataUpdate?.quantity,
+      enable: dataUpdate?.enable,
+    }, {
       new: true,
     });
 
