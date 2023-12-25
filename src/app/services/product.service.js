@@ -46,15 +46,15 @@ const updateProduct = asyncHandler(async (req) => {
     {
       if(dataUpdate.sale)
       {
-        console.log("o day ne")
         product.priceSale = dataUpdate.price * ((100 - dataUpdate.sale) / 100);
       }
       else {
         product.priceSale = dataUpdate.price;
+        product.sale = 0;
       }
     }
     else {
-      if(dataUpdate.sale != 0)
+      if(dataUpdate.sale && dataUpdate != 0)
       {
         product.priceSale = product.price * ((100 - dataUpdate.sale) / 100);
       }
