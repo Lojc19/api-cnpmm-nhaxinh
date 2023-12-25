@@ -1,5 +1,5 @@
 const express = require("express");
-const { createUser, updatedUserAdmin, getaUserAdmin, loginUser, getallUser,getaUser,updatedUser, deleteaUser, handleRefreshToken, logout, updatePassword, forgotPasswordOTP, resetPassword, addToWishlist, getWishlist, loginAdmin } = require("../controllers/user.controller");
+const { createUser, updatedUserAdmin, getaUserAdmin,checkOtpResetPass, loginUser, getallUser,getaUser,updatedUser, deleteaUser, handleRefreshToken, logout, updatePassword, forgotPasswordOTP, resetPassword, addToWishlist, getWishlist, loginAdmin } = require("../controllers/user.controller");
 const { authMiddleware, isAdmin, isAdminStaff } = require("../middlewares/authMiddleware"); 
 const router = express.Router();
 
@@ -28,6 +28,7 @@ router.get("/refresh", handleRefreshToken);
 router.get("/logout", logout);
 router.put("/updatepass", authMiddleware, updatePassword);
 
+router.post("/checkOtpResetPass", checkOtpResetPass);
 router.post("/forgot-password", forgotPasswordOTP);
 router.put("/reset-password", resetPassword);
 

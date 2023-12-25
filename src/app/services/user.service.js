@@ -159,18 +159,34 @@ const forgotPasswordOTP = asyncHandler(async (req) => {
 });
 
 const resetPassword = asyncHandler(async (req, res) => {
-  const { password } = req.body;
+  const {email, password } = req.body;
   const otpCode = req.body.otpCode;
   const user = await User.findOne({
+    email: email,
     otpResetPassword: otpCode,
     passwordResetExpires: { $gt: Date.now() },
   });
-  if (!user) throw new Error(" Otp Expired, Please try again later");
+  if (!user) throw new Error("Có lỗi xảy ra, thời gian thao tác quá lâu hãy thực hiện lại");
   user.password = password;
   user.otpResetPassword = undefined;
   user.passwordResetExpires = undefined;
   await user.save();
   return user;
+});
+
+const checkOtpResetPass = asyncHandler(async (req, res) => {
+  try {
+    const {otpCode, email} = req.body;
+    const user = await User.findOne({
+      email: email,
+      otpResetPassword: otpCode,
+      passwordResetExpires: { $gt: Date.now() },
+    });
+    if (!user) throw new Error("Mã OTP hết hạn, hoặc sai vui lòng nhập lại");
+    return
+  } catch (error) {
+    throw new Error(error);
+  }
 });
 
 const handleRefreshToken = asyncHandler(async (req, res) => {
@@ -355,4 +371,4 @@ const addToWishlist = asyncHandler(async (req) => {
   }
 });
 
-module.exports = {createUser, loginUser, getallUser, getaUser, updatedUser, deleteaUser, handleRefreshToken, logout, updatePassword, forgotPasswordOTP, resetPassword, addToWishlist, getWishlist, loginAdmin, getaUserAdmin, updatedUserAdmin};
+module.exports = {createUser, loginUser, getallUser, getaUser, updatedUser, deleteaUser, handleRefreshToken, logout, updatePassword,checkOtpResetPass, forgotPasswordOTP, resetPassword, addToWishlist, getWishlist, loginAdmin, getaUserAdmin, updatedUserAdmin};

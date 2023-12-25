@@ -70,6 +70,18 @@ const forgotPasswordOTP = asyncHandler(async (req, res) => {
   }
 });
 
+const checkOtpResetPass = asyncHandler(async (req, res) => {
+  try {
+    await userService.checkOtpResetPass(req);
+    res.json({
+      status: "success",
+      message: "OTP hợp lệ"
+    })
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
 const resetPassword = asyncHandler(async (req, res) => {
   try {
     const data = await userService.resetPassword(req, res);
@@ -168,4 +180,4 @@ const getWishlist = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = {createUser, loginUser, loginAdmin, getallUser, getaUser, updatedUser, deleteaUser, handleRefreshToken, logout, updatePassword, forgotPasswordOTP, resetPassword, addToWishlist, getWishlist, getaUserAdmin, updatedUserAdmin};
+module.exports = {createUser,checkOtpResetPass, loginUser, loginAdmin, getallUser, getaUser, updatedUser, deleteaUser, handleRefreshToken, logout, updatePassword, forgotPasswordOTP, resetPassword, addToWishlist, getWishlist, getaUserAdmin, updatedUserAdmin};
