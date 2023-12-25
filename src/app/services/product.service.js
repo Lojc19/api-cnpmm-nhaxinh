@@ -42,13 +42,17 @@ const updateProduct = asyncHandler(async (req) => {
     const dataUpdate = req.body;
     validateMongoDbId(_id);
     let product = await Product.findById(_id);
-    await Product.findOneAndUpdate({_id: _id}, {
+    if(!product)
+    {
+      throw new Error("Không tìm thấy product")
+    }
+    let updateProduct = await Product.findOneAndUpdate({_id: _id}, {
       code: dataUpdate?.code,
-      name: dataUpdate?.firstname,
-      description: dataUpdate?.lastname,
-      shortDescription: dataUpdate?.email,
-      category: dataUpdate?.username,
-      room: dataUpdate?.phone,
+      name: dataUpdate?.name,
+      description: dataUpdate?.description,
+      shortDescription: dataUpdate?.shortDescription,
+      category: dataUpdate?.category,
+      room: dataUpdate?.room,
       $set: { specs: dataUpdate?.specs },
       price: dataUpdate?.price,
       sale: dataUpdate?.sale,
@@ -58,28 +62,18 @@ const updateProduct = asyncHandler(async (req) => {
       new: true,
     });
 
-    if(dataUpdate.price)
+    if(dataUpdate.name)
     {
-      if(dataUpdate.sale)
-      {
-        product.priceSale = dataUpdate.price * ((100 - dataUpdate.sale) / 100);
-      }
-      else {
-        product.priceSale = dataUpdate.price;
-        product.sale = 0;
-      }
-    }
-    else {
-      if(dataUpdate.sale && dataUpdate != 0)
-      {
-        product.priceSale = product.price * ((100 - dataUpdate.sale) / 100);
-      }
-      else {
-        product.priceSale = product.price;
-      }
+      updateProduct.slug = slugify(dataUpdate.name);
     }
 
-    await product.save()
+    if(updateProduct.sale == 0){
+      updateProduct.priceSale = updateProduct.price;
+    }
+    else {
+      updateProduct.priceSale = updateProduct.price * ((100 - updateProduct.sale) / 100);
+    }
+    await updateProduct.save()
     return null
   } catch (error) {
     throw new Error(error);
