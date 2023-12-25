@@ -18,7 +18,6 @@ const updateProduct = asyncHandler(async (req, res) => {
   const data = await productService.updateProduct(req);
   res.json({
     status: "success",
-    data,
     message: "Cập nhật thành công"
   })
 });
