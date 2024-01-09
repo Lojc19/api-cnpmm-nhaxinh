@@ -1,12 +1,15 @@
-const bodyParser = require("body-parser");
 const express = require('express');
-const db = require('./src/config/db/connect');
 const cors = require('cors');
+const cookieParser = require("cookie-parser");
+const morgan = require("morgan");
+const bodyParser = require("body-parser");
 
 const app = express();
 
 const dotenv = require("dotenv").config()
 const port = process.env.PORT || 4000
+
+const db = require('./src/config/db/connect');
 
 const userRouter = require('./src/app/routes/user.route')
 const productRouter = require('./src/app/routes/product.route');
@@ -19,23 +22,31 @@ const orderRouter = require('./src/app/routes/order.route');
 const reviewRouter = require('./src/app/routes/review.route');
 const statisticalRouter = require('./src/app/routes/statistical.route')
 
-
-const cookieParser = require("cookie-parser");
-const morgan = require("morgan");
 const { errorHandler, notFound } = require('./src/app/middlewares/errorHandler');
 
 
 db.connect();
+
 app.use(cors({
-  origin: ['http://localhost:3000'],
+  origin: '*',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true
+  credentials: true,
 }));
+
+// app.use(cors({
+//   origin: ['http://localhost:5500'],
+//   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+//   credentials: true,
+// }));
+
+  // app.use(cors());
+
 app.use(morgan("dev"));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+
 
 app.use("/api/user", userRouter);
 app.use("/api/product", productRouter);

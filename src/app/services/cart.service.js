@@ -12,7 +12,7 @@ const addtoCart = asyncHandler(async (req) => {
   
     try {
       let cart = await Cart.findOne({ userId });
-      let product = await Product.findById(productId)
+      let product = await Product.findById(productId) // product trong db
       
       if (cart) {
         //cart exists for user
@@ -20,7 +20,7 @@ const addtoCart = asyncHandler(async (req) => {
   
         if (itemIndex > -1) {
           //product exists in the cart, update the quantity
-          let productItem = cart.products[itemIndex];
+          let productItem = cart.products[itemIndex]; // product trong cart
           if(productItem.quantity + quantity <= product.quantity)
           {
             productItem.quantity = productItem.quantity + quantity;
