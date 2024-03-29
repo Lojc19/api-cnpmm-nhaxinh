@@ -1,5 +1,6 @@
 const Review = require("../models/review.model");
 const Product = require("../models/product.model");
+const Order = require("../models/order.model");
 
 const asyncHandler = require('express-async-handler');
 const validateMongoDbId = require("../../utils/validateMongodbId");
@@ -15,6 +16,9 @@ const createReview = asyncHandler(async (req) => {
           const product = await Product.findOne({_id: productID});
           console.log(product._id)
           let alreadyRated = await Review.find({userID: _id, productID: productID});
+          var orders = Order.find({ "orderby": _id, "status": "Delivered" });
+          console.log(orders)
+
           if (alreadyRated.length != 0) {
             throw new Error("Bạn đã đánh giá sản phẩm này rồi")
           } else {

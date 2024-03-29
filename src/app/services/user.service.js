@@ -122,16 +122,25 @@ const logout = asyncHandler(async (req, res) => {
 });
 
 const updatePassword = asyncHandler(async (req) => {
-  const { _id } = req.user;
-  const { password } = req.body;
-  validateMongoDbId(_id);
-  const user = await User.findById(_id);
-  if (password) {
-    user.password = password;
-    const updatedPassword = await user.save();
-    return updatedPassword
-  } else {
-    return user;
+  try {
+    // const { _id } = req.user;
+    const { passwordNow, passwordNew } = req.body;
+    if(!(await req.user.isPasswordMatched(passwordNow))) {
+      throw new Error("Mật khẩu cũ không đúng")
+    }
+    if(await req.user.isPasswordMatched(passwordNew)) {
+      throw new Error("Mật khẩu mới trùng với mật khẩu cũ ")
+    }
+    // validateMongoDbId(_id);
+    // const user = await User.findById(_id);
+    if (passwordNew) {
+      req.user.password = passwordNew;
+      const updatedPassword = await req.user.save();
+      return updatedPassword
+    }
+  }
+  catch (err) {
+    throw new Error(err)
   }
 });
 
