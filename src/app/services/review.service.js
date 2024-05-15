@@ -12,12 +12,30 @@ const createReview = asyncHandler(async (req) => {
     try {
         const { _id } = req.user;
         const { star, productID, comment } = req.body;
+        console.log(productID)
         try {
           const product = await Product.findOne({_id: productID});
-          console.log(product._id)
           let alreadyRated = await Review.find({userID: _id, productID: productID});
-          var orders = Order.find({ "orderby": _id, "status": "Delivered" });
-          console.log(orders)
+
+          let orders = await Order.find({ orderby: _id, status: "Delivered"});
+
+          let hasBoughtProduct = false;
+          orders.forEach(function(order) {
+            order.products.forEach(function(products) {
+              console.log(products._id.toString())
+                  if (products.product._id == productID) {
+                    hasBoughtProduct = true;
+                    return;
+                  }
+              });
+              if (hasBoughtProduct) {
+                return;
+              }
+          });
+          if(hasBoughtProduct == false){
+            throw new Error("Bạn không thể đánh giá sản phẩm này")
+          }
+
 
           if (alreadyRated.length != 0) {
             throw new Error("Bạn đã đánh giá sản phẩm này rồi")

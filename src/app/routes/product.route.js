@@ -18,14 +18,14 @@ const router = express.Router();
 
 router.post("/create-product", authMiddleware, isAdmin, uploadCloud.array('images', 5), createProduct);
 
-router.get("/product-detail/:_id", getaProduct);
+router.get("/:slug", getaProduct);
 router.get("/category/:id", getProductCategory);
 router.get("/room/:id", getProductRoom);
 
 router.put("/updateProduct/:_id", authMiddleware, isAdmin, updateProduct);
 router.delete("/:id", authMiddleware, isAdmin, deleteProduct);
 
-router.get("/getAllProduct", getAllProduct);
+router.get("/", getAllProduct);
 
 router.get("/admin/getAll",authMiddleware, isAdmin, getAllProductAdmin);
 

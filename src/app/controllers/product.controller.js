@@ -34,8 +34,8 @@ const deleteProduct = asyncHandler(async (req, res) => {
 });
 
 const getaProduct = asyncHandler(async (req, res) => {
-  const { _id } = req.params;
-  const data = await productService.getaProduct(_id);
+  const { slug } = req.params;
+  const data = await productService.getaProduct(slug);
   res.json({
     status: "success",
     data,
