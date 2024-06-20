@@ -44,7 +44,7 @@ const createOrder = asyncHandler(async (req) => {
         total: finalTotal,
         coupon: coupon._id,
         orderby: user._id,
-        orderStatus: "Processing",
+        orderStatus: "Pending",
       }).save();
 
       let update = userCart.products.map((item) => {
@@ -116,7 +116,7 @@ const updateOrderStatusUser = asyncHandler(async (req) => {
 
       const { status } = req.body;
       const { _id } = req.params;
-      if(status != "Processing" && status != "Dispatched" && status != "Cancelled" && status != "Delivered") throw new Error("Trạng thái không hợp lệ")
+      if(status != "Processing" && status != "Pending" && status != "Cancelled" && status != "Delivered") throw new Error("Trạng thái không hợp lệ")
       let order = await Order.findOne({_id: _id});
       if(status !== "Cancelled") throw new Error("Lỗi")
       if(order.status == "Cancelled" || order.status != "Processing") throw new Error("Không chỉnh sửa được trạng thái đơn hàng")
