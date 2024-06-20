@@ -33,7 +33,7 @@ router.post('/create_payment_url', function (req, res, next) {
     let tmnCode = "KZRPMPVP";
     let secretKey = "X5L9RD20DC7CZ7D7CVL4LO5NJA99Z1ID"
     let vnpUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"
-    let returnUrl = "http://localhost:3000/api/order/vnpay_return"
+    let returnUrl = "https://api-nhaxinh.onrender.com/api/order/vnpay_return"
     let orderId = req.body.orderId;
     let amount = req.body.amount;
     let bankCode = "VNBANK";
