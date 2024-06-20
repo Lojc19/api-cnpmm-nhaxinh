@@ -70,12 +70,12 @@ router.post('/create_payment_url', function (req, res, next) {
     let signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex"); 
     vnp_Params['vnp_SecureHash'] = signed;
     vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: false });
-    console.log(vnpUrl);
-    res.json({
-        status: "success",
-        url: vnpUrl,
-        message: "Tao Url Thanh Cong"
-    })
+    res.redirect(vnpUrl)
+    // res.json({
+    //     status: "success",
+    //     url: vnpUrl,
+    //     message: "Tao Url Thanh Cong"
+    // })
 });
 
 router.get('/vnpay_return', function (req, res, next) {
@@ -103,7 +103,7 @@ router.get('/vnpay_return', function (req, res, next) {
         if(code == "00")
         {
             updateOrderSuccess(orderId);
-            console.log("abc")
+            res.redirect("https://www.facebook.com/BasLocc/")
             res.json({
                 status: "success",
                 message: "Thanh toán thành công"
