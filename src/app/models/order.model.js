@@ -3,9 +3,17 @@ const mongoose = require("mongoose"); // Erase if already required
 // Declare the Schema of the Mongo model
 var orderSchema = new mongoose.Schema(
   {
+    orderId: {
+      type: String,
+      required: true
+    },
     PaymentMethod: {
         type: String,
         required: true,
+    },
+    PaymentStatus: {
+      type: String,
+      required: true,
     },
     name: {
       type: String,

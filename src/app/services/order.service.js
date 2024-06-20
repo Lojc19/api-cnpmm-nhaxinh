@@ -5,6 +5,7 @@ const Cart = require("../models/cart.model");
 const Coupon = require("../models/coupon.model");
 const Product = require("../models/product.model");
 const mongoose = require('mongoose');
+const moment = require('moment');
 
 const createOrder = asyncHandler(async (req) => {
     const { couponApplied } = req.body;
@@ -29,8 +30,13 @@ const createOrder = asyncHandler(async (req) => {
         }
       }
 
+      let date = new Date();
+      let orderId = moment(date).format('DDHHmmss');
+
       let newOrder = await new Order({
+        orderId: orderId,
         PaymentMethod: req.body.PaymentMethod,
+        PaymentStatus: "Unpaid",
         name:  req.body.name,
         email:  req.body.email,
         phoneNumber:  req.body.phoneNumber,
@@ -57,7 +63,11 @@ const createOrder = asyncHandler(async (req) => {
       });
       const updated = await Product.bulkWrite(update, {});
       await Cart.findOneAndDelete({ userId: _id });
-      return 
+      let data =
+        {
+          orderId: orderId
+        }
+      return data
     } catch (error) {
       throw new Error(error);
     }
@@ -151,7 +161,7 @@ const updateOrderStatusAdmin = asyncHandler(async (req) => {
       const { _id } = req.params;
       if(status != "Processing" && status != "Dispatched" && status != "Cancelled" && status != "Delivered") throw new Error("Trạng thái không hợp lệ")
 
-      await Order.findByIdAndUpdate(
+      const order = await Order.findByIdAndUpdate(
         _id,
         {
           status: status,
@@ -169,6 +179,17 @@ const updateOrderStatusAdmin = asyncHandler(async (req) => {
           };
         });
         const updated = await Product.bulkWrite(update, {});
+      }
+      if(status == "Delivered")
+      {
+
+        await Order.findByIdAndUpdate(
+          _id,
+          {
+            PaymentStatus: "Paid",
+          },
+          { new: true }
+        );
       }
       return
     } catch (error) {

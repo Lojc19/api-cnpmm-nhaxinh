@@ -3,6 +3,9 @@ const { createOrder, getOrderByUserId, getOrderDetail, getAllOrders, updateOrder
 const { authMiddleware, isAdmin, isAdminStaff } = require("../middlewares/authMiddleware"); 
 const router = express.Router();
 let $ = require('jquery');
+const Order = require("../models/order.model");
+const Product = require("../models/product.model");
+
 const request = require('request');
 const moment = require('moment');
 // create
@@ -96,11 +99,59 @@ router.get('/vnpay_return', function (req, res, next) {
 
     if(secureHash === signed){
         const orderId = req.query.vnp_TxnRef;
-        res.render('success', {code: vnp_Params['vnp_ResponseCode']})
+        const code = vnp_Params['vnp_ResponseCode']
+        if(code == "00")
+        {
+            updateOrderSuccess(orderId);
+            console.log("abc")
+            res.json({
+                status: "success",
+                message: "Thanh toán thành công"
+            })
+        }
+        else
+        {
+            updateOrderFail(orderId);
+            res.json({
+                status: "fail",
+                message: "Thanh toán thất bại"
+            })
+        }
+        // res.render('success', {code: vnp_Params['vnp_ResponseCode']})
     } else{
         res.render('success', {code: '97'})
     }
 });
+
+const updateOrderSuccess = async(orderId) => {
+    await Order.findOneAndUpdate(
+        {orderId: orderId},  
+        { PaymentStatus: "Paid" } , 
+        {
+        new: true
+      })
+    return
+}
+
+const updateOrderFail = async(orderId) => {
+    await Order.findOneAndUpdate(
+        {orderId: orderId},  
+        { status: "Cancelled" } , 
+        {
+        new: true
+      })
+
+      let update = order.products.map((item) => {
+        return {
+          updateOne: {
+            filter: { _id: item.product._id },
+            update: { $inc: { quantity: +item.quantity, sold: -item.quantity } },
+          },
+        };
+      });
+      const updated = await Product.bulkWrite(update, {});
+    return
+}
 
 function sortObject(obj) {
 	let sorted = {};
