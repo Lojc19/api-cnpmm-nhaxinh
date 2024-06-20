@@ -164,8 +164,8 @@ router.get('/vnpay_ipn', function (req, res, next) {
     delete vnp_Params['vnp_SecureHashType'];
 
     vnp_Params = sortObject(vnp_Params);
-    let config = require('config');
-    let secretKey = config.get('vnp_HashSecret');
+    // let config = require('config');
+    let secretKey = "GQBU6W6VJ1YAY5TZ4TC8G692KPLLZS16";
     let querystring = require('qs');
     let signData = querystring.stringify(vnp_Params, { encode: false });
     let crypto = require("crypto");     
