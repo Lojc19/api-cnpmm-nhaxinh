@@ -30,8 +30,8 @@ router.post('/create_payment_url', function (req, res, next) {
         req.socket.remoteAddress ||
         req.connection.socket.remoteAddress;
     //let config = require('config');
-    let tmnCode = "KZRPMPVP";
-    let secretKey = "X5L9RD20DC7CZ7D7CVL4LO5NJA99Z1ID"
+    let tmnCode = "XHN91STI";
+    let secretKey = "GQBU6W6VJ1YAY5TZ4TC8G692KPLLZS16"
     let vnpUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"
     let returnUrl = "https://api-nhaxinh.onrender.com/api/order/vnpay_return"
     let orderId = req.body.orderId;
@@ -87,8 +87,8 @@ router.get('/vnpay_return', function (req, res, next) {
 
     vnp_Params = sortObject(vnp_Params);
 
-    var tmnCode =  "KZRPMPVP";
-    var secretKey = "X5L9RD20DC7CZ7D7CVL4LO5NJA99Z1ID";
+    var tmnCode =  "XHN91STI";
+    var secretKey = "GQBU6W6VJ1YAY5TZ4TC8G692KPLLZS16";
 
     var querystring = require('qs');
     var signData = querystring.stringify(vnp_Params, { encode: false });
@@ -101,7 +101,8 @@ router.get('/vnpay_return', function (req, res, next) {
         const code = vnp_Params['vnp_ResponseCode']
         if(code == "00")
         {
-            updateOrderSuccess(orderId);
+            // updateOrderSuccess(orderId);
+            res.redirect('http://127.0.0.1:5173/');
             res.json({
                 status: "success",
                 message: "Thanh toán thành công"
@@ -109,7 +110,8 @@ router.get('/vnpay_return', function (req, res, next) {
         }
         else
         {
-            updateOrderFail(orderId);
+            res.redirect('http://127.0.0.1:5173/');
+            // updateOrderFail(orderId);
             res.json({
                 status: "fail",
                 message: "Thanh toán thất bại"
@@ -184,12 +186,14 @@ router.get('/vnpay_ipn', function (req, res, next) {
                         //thanh cong
                         //paymentStatus = '1'
                         // Ở đây cập nhật trạng thái giao dịch thanh toán thành công vào CSDL của bạn
+                        updateOrderSuccess(orderId);
                         res.status(200).json({RspCode: '00', Message: 'Success'})
                     }
                     else {
                         //that bai
                         //paymentStatus = '2'
                         // Ở đây cập nhật trạng thái giao dịch thanh toán thất bại vào CSDL của bạn
+                        updateOrderFail(orderId);
                         res.status(200).json({RspCode: '00', Message: 'Success'})
                     }
                 }
