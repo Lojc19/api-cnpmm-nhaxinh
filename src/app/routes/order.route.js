@@ -102,7 +102,7 @@ router.get('/vnpay_return', function (req, res, next) {
         if(code == "00")
         {
             // updateOrderSuccess(orderId);
-            res.redirect('http://127.0.0.1:5173/');
+            res.redirect('https://ecom-noithat.vercel.app/payment/thank');
             res.json({
                 status: "success",
                 message: "Thanh toán thành công"
@@ -110,7 +110,7 @@ router.get('/vnpay_return', function (req, res, next) {
         }
         else
         {
-            res.redirect('http://127.0.0.1:5173/');
+            res.redirect('https://ecom-noithat.vercel.app/payment/fail');
             // updateOrderFail(orderId);
             res.json({
                 status: "fail",
