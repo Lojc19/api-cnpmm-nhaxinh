@@ -3,7 +3,7 @@ const User = require("../models/user.model");
 const asyncHandler = require("express-async-handler");
 const validateMongoDbId = require("../../utils/validateMongodbId");
 const slugify = require("slugify");
-const {deleteImages} = require("../../config/cloudinary");
+const {deleteImages, deleteImagesFileName} = require("../../config/cloudinary");
 const mongoose = require('mongoose');
 
 const createProduct = asyncHandler(async (req) => {
@@ -134,12 +134,36 @@ const updateImageProduct = asyncHandler(async (req) => {
   }
 });
 
-const deleteProduct = asyncHandler(async (req, res) => {
-  const id = req.params;
-  validateMongoDbId(id);
+const updateImageProductDelete = asyncHandler(async (req, res) => {
   try {
-    const deleteProduct = await Product.findOneAndDelete(id);
-    res.json(deleteProduct);
+    const id_Product = req.query.id_Product;
+    const url_image = req.query.url_image;
+    const id_image = req.query.id_image;
+
+    const parts = url_image.split('/upload/')[1].split('.');
+    const afterUpload = parts.slice(0, parts.length - 1).join('.');
+    const parts2 = afterUpload.split('/');
+    const fileName = parts2.slice(1).join('/');
+
+    const deleteImageProduct = Product.findByIdAndUpdate(
+      id_Product,
+      { $pull: { images: { _id: id_image } } },
+      { new: true } // Để trả về tài liệu đã được cập nhật
+    )
+    deleteImagesFileName(fileName);
+    return deleteImageProduct;
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+const deleteProduct = asyncHandler(async (req, res) => {
+  const { _id } = req.params;
+  validateMongoDbId(_id);
+  try {
+    console.log(_id)
+    const deleteProduct = await Product.findByIdAndDelete(_id);
+    return
   } catch (error) {
     throw new Error(error);
   }
@@ -315,5 +339,6 @@ module.exports = {
   getProductRoom,
   searchProduct,
   getAllProductAdmin,
-  updateImageProduct
+  updateImageProduct,
+  updateImageProductDelete
 };

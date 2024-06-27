@@ -37,6 +37,20 @@ async function deleteImages(files) {
   }
 }
 
+async function deleteImagesFileName(fileName) {
+  try {
+      const result = await cloudinary.uploader.destroy(fileName, {
+        type: 'upload',
+        resource_type: 'image'
+      });
+      console.log(result);
+      return result;
+  } catch (error) {
+    console.error(error);
+    throw error; // Rethrow the error to handle it at the higher level if needed
+  }
+}
+
 const uploadCloud = multer({ storage });
 
-module.exports = { uploadCloud, deleteImages };
+module.exports = { uploadCloud, deleteImages, deleteImagesFileName };

@@ -30,12 +30,21 @@ const updateImageProduct = asyncHandler(async (req, res) => {
   })
 });
 
+const updateImageProductDelete = asyncHandler(async (req, res) => {
+  const data = await productService.updateImageProductDelete(req);
+  res.json({
+    status: "success",
+    message: "Cập nhật thành công"
+  })
+});
+
 const deleteProduct = asyncHandler(async (req, res) => {
-  const id = req.params;
-  validateMongoDbId(id);
   try {
-    const deleteProduct = await Product.findOneAndDelete(id);
-    res.json(deleteProduct);
+    const deleteProduct = await productService.deleteProduct(req);
+    res.json({
+      status: "success",
+      message: "Xóa sản phẩm thành công"
+    })
   } catch (error) {
     throw new Error(error);
   }
@@ -111,5 +120,6 @@ module.exports = {
   getProductRoom,
   searchProduct,
   getAllProductAdmin,
-  updateImageProduct
+  updateImageProduct,
+  updateImageProductDelete
 };
