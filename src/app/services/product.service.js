@@ -46,6 +46,17 @@ const updateProduct = asyncHandler(async (req) => {
     {
       throw new Error("Không tìm thấy product")
     }
+    const updateFields = {};
+    const arrayFilters = [];
+    if(req.body.specs)
+    {
+      req.body.specs.forEach((spec, index) => {
+        const placeholder = `elem${index}`;
+        updateFields[`specs.$[${placeholder}].v`] = spec.v;
+        arrayFilters.push({ [`${placeholder}.k`]: spec.k });
+      });
+    }
+
     let updateProduct = await Product.findOneAndUpdate({_id: _id}, {
       code: dataUpdate?.code,
       name: dataUpdate?.name,
@@ -53,12 +64,17 @@ const updateProduct = asyncHandler(async (req) => {
       shortDescription: dataUpdate?.shortDescription,
       category: dataUpdate?.category,
       room: dataUpdate?.room,
-      $set: { specs: dataUpdate?.specs },
+      $set: updateFields,
       price: dataUpdate?.price,
       sale: dataUpdate?.sale,
       quantity: dataUpdate?.quantity,
       enable: dataUpdate?.enable,
-    }, {
+    },
+    {
+      arrayFilters: arrayFilters,
+      returnOriginal: false
+    },
+    {
       new: true,
     });
 
