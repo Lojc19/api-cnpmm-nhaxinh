@@ -9,7 +9,7 @@ const {
   getProductRoom,
   searchProduct,
   getAllProductAdmin,
-  uploadImageProduct
+  updateImageProduct
 } = require("../controllers/product.controller");
 const { isAdmin, authMiddleware } = require("../middlewares/authMiddleware");
 const {uploadCloud} = require("../../config/cloudinary");
@@ -23,6 +23,8 @@ router.get("/category/:id", getProductCategory);
 router.get("/room/:id", getProductRoom);
 
 router.put("/updateProduct/:_id", authMiddleware, isAdmin, updateProduct);
+router.post("/updateImageProduct/:_id", authMiddleware, isAdmin, uploadCloud.array('images', 5), updateImageProduct);
+
 router.delete("/:id", authMiddleware, isAdmin, deleteProduct);
 
 router.get("/", getAllProduct);
@@ -30,7 +32,5 @@ router.get("/", getAllProduct);
 router.get("/admin/getAll",authMiddleware, isAdmin, getAllProductAdmin);
 
 router.get("/search/:s", searchProduct);
-
-router.post("/uploadImage/:_id", uploadImageProduct);
 
 module.exports = router;

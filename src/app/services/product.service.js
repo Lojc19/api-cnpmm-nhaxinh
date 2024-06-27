@@ -4,6 +4,7 @@ const asyncHandler = require("express-async-handler");
 const validateMongoDbId = require("../../utils/validateMongodbId");
 const slugify = require("slugify");
 const {deleteImages} = require("../../config/cloudinary");
+const mongoose = require('mongoose');
 
 const createProduct = asyncHandler(async (req) => {
   try {
@@ -92,6 +93,43 @@ const updateProduct = asyncHandler(async (req) => {
     await updateProduct.save()
     return null
   } catch (error) {
+    throw new Error(error);
+  }
+});
+
+const updateImageProduct = asyncHandler(async (req) => {
+  try {
+    const { _id } = req.params;
+    const idObjectImg  = JSON.parse(req.body.arrayId);
+    if(!req.files){
+      throw new Error("Miss input")
+    }
+
+    const updatedUrls = req.files.map(item => ({ url: item.path }));
+    
+    const setObj = {};
+    const arrayFilters = [];
+
+    updatedUrls.forEach((url, index) => {
+      const placeholder = `elem${index}`;
+      setObj[`images.$[${placeholder}].url`] = updatedUrls[index].url; // Thiết lập URL mới cho từng phần tử trong mảng `images`
+      arrayFilters.push({ [`${placeholder}._id`]: idObjectImg[index] });
+    });
+
+    const updatedProduct = await Product.findOneAndUpdate(
+      { _id: _id }, // Điều kiện tìm kiếm document Product cần cập nhật
+      {      
+        $set: setObj,
+      }, // Đối tượng cập nhật với $set để thay đổi từng phần tử trong mảng images
+      {
+        arrayFilters: arrayFilters, // Điều kiện cụ thể cho từng phần tử mảng images
+        returnOriginal: false, // Trả về document đã cập nhật
+        new: true // Trả về document mới đã cập nhật
+      }
+    );
+    return updatedProduct;
+  } catch (error) {
+    deleteImages(req.files)
     throw new Error(error);
   }
 });
@@ -265,14 +303,6 @@ const getProductRoom = asyncHandler(async (id) => {
   }
 });
 
-const uploadImageProduct = asyncHandler(async (req) => {
-  try {
-    console.log(req.file)
-    return "Ok"
-  } catch (error) {
-    throw new Error(error);
-  }
-});
 
 
 module.exports = {
@@ -285,5 +315,5 @@ module.exports = {
   getProductRoom,
   searchProduct,
   getAllProductAdmin,
-  uploadImageProduct
+  updateImageProduct
 };

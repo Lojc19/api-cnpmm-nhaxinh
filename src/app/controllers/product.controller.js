@@ -22,6 +22,14 @@ const updateProduct = asyncHandler(async (req, res) => {
   })
 });
 
+const updateImageProduct = asyncHandler(async (req, res) => {
+  const data = await productService.updateImageProduct(req);
+  res.json({
+    status: "success",
+    message: "Cập nhật thành công"
+  })
+});
+
 const deleteProduct = asyncHandler(async (req, res) => {
   const id = req.params;
   validateMongoDbId(id);
@@ -92,14 +100,6 @@ const getProductRoom = asyncHandler(async (req, res) => {
   });
 });
 
-const uploadImageProduct = asyncHandler(async (req, res) => {
-  const data = await productService.uploadImageProduct(req);
-  res.json({
-    status:"success",
-    data,
-    message: "",
-  });
-});
 
 module.exports = {
   createProduct,
@@ -111,5 +111,5 @@ module.exports = {
   getProductRoom,
   searchProduct,
   getAllProductAdmin,
-  uploadImageProduct
+  updateImageProduct
 };
