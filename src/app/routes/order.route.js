@@ -21,6 +21,8 @@ router.put("/user/:_id",authMiddleware, updateOrderStatusUser);
 
 router.put("/admin/:_id",authMiddleware, isAdminStaff, updateOrderStatusAdmin);
 
+router.put("/admin/ghn/create_order",authMiddleware, isAdminStaff, updateOrderStatusAdmin);
+
 router.post('/create_payment_url', function (req, res, next) {
     process.env.TZ = 'Asia/Ho_Chi_Minh';
     let date = new Date();
@@ -134,7 +136,7 @@ const updateOrderSuccess = async(orderId) => {
 }
 
 const updateOrderFail = async(orderId) => {
-    await Order.findOneAndUpdate(
+    const order = await Order.findOneAndUpdate(
         {orderId: orderId},  
         { status: "Cancelled" } , 
         {
