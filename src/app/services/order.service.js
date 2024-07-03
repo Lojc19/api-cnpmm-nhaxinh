@@ -13,7 +13,6 @@ const createOrder = asyncHandler(async (req) => {
     try {
       const user = await User.findById(_id);
       let userCart = await Cart.findOne({ userId: user._id }).populate({path: "products.product", select:'name quantity'});
-      console.log(userCart.products)
       let finalTotal = 0;
       let coupon = "";
       if (couponApplied) {

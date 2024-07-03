@@ -6,8 +6,8 @@ var voucher_codes = require('voucher-code-generator');
 const createCoupon = asyncHandler(async (req) => {
   try{
     let codeCoupon = voucher_codes.generate({
-      prefix: "nhaxinh-",
-      postfix: "-2023",
+      prefix: "homeLC-",
+      postfix: "-2024",
       count: 1,
       length: 8,
     });
@@ -16,12 +16,14 @@ const createCoupon = asyncHandler(async (req) => {
       name: req.body.name,
       code: codeCoupon[0],
       expiry: req.body.expiry,
-      discount: req.body.discount,
+      quantity: req.body.quantity,
+      discount: req.body.discount
     });
     const data = {
       name: coupon.name,
       code: coupon.code,
       expiry: coupon.expiry,
+      quantity: coupon.quantity,
       discount: coupon.discount
     }
     return data
@@ -43,6 +45,10 @@ const getaCoupon = asyncHandler(async (code) => {
     {
       throw new Error("Mã giảm giá đã hết hạn");
     }
+    if(coupon.quantity == 0)
+    {
+      throw new Error("Mã giảm giá đã hết")
+    }
     return coupon
   } catch (error) {
     throw new Error(error);
@@ -52,7 +58,7 @@ const getaCoupon = asyncHandler(async (code) => {
 const getallCoupon = asyncHandler(async () => {
   try {
     const data = await Coupon.find({},{
-      createdAt: 0,
+      createdAt: 1,
       updatedAt: 0,
       __v: 0
     });
@@ -65,7 +71,6 @@ const getallCoupon = asyncHandler(async () => {
 const deleteCoupon = asyncHandler(async (_id) => {
   try {
     await Coupon.findOneAndDelete({_id: _id});
-    console.log(_id)
     return
   } catch (error) {
     throw new Error(error);

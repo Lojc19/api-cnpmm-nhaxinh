@@ -74,11 +74,20 @@ const getCart = asyncHandler(async (req) => {
     const { _id } = req.user;
     validateMongoDbId(_id);
     try {
-      let cart = await Cart.findOne({ userId: _id }).populate({path: "products.product", select:'priceSale'});
+      let cart = await Cart.findOne({ userId: _id }).populate({path: "products.product", select:'name priceSale enable'});
       if(!cart)
       {
         return []
       }
+
+      for (let i = 0; i < cart.products.length; i++) {
+        if(cart.products[i].product.enable == false){
+          cart.products.splice(i,1);
+          await cart.save();
+          // throw new Error("Sản phẩm " + `${cart.products[i].product.name}` + " hiện không khả dụng" ); 
+        }
+      }
+      
       let cartTotal = 0;
       for (let i = 0; i < cart.products.length; i++) {
         cart.products[i].totalPriceItem = cart.products[i].quantity * cart.products[i].product.priceSale;

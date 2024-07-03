@@ -16,6 +16,10 @@ var couponSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  quantity: {
+    type: Number,
+    required: true,
+  },
   discount: {
     type: Number,
     required: true,
