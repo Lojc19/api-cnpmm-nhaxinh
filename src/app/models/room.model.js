@@ -6,12 +6,6 @@ var roomSchema = new mongoose.Schema({
         required:true,
         unique: true,
     },
-    slug: {
-        type: String,
-        required: true,
-        unique: true,
-        lowercase: true,
-    },
     categories: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Category",
