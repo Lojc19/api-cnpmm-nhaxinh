@@ -6,9 +6,11 @@ var roomSchema = new mongoose.Schema({
         required:true,
         unique: true,
     },
-    icUrl: {
+    slug: {
         type: String,
-        default: ""
+        required: true,
+        unique: true,
+        lowercase: true,
     },
     categories: [{
         type: mongoose.Schema.Types.ObjectId,

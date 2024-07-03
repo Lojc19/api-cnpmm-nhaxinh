@@ -6,6 +6,7 @@ const Coupon = require("../models/coupon.model");
 const Product = require("../models/product.model");
 const mongoose = require('mongoose');
 const moment = require('moment');
+const { sendEmailCreateOrder } = require("../controllers/email.controller");
 
 const createOrder = asyncHandler(async (req) => {
     const { couponApplied } = req.body;
@@ -17,6 +18,11 @@ const createOrder = asyncHandler(async (req) => {
       let coupon = "";
       if (couponApplied) {
         coupon = await Coupon.findOne({code: couponApplied});
+        const now = new Date();
+        if(now.getTime() >= coupon.expiry.getTime() || coupon.quantity == 0)
+        {
+          throw new Error("Mã giảm giá đã hết hạn hoặc đã hết");
+        }
         finalTotal = userCart.cartTotal - userCart.cartTotal * coupon.discount / 100;
       } else {
         finalTotal = userCart.cartTotal;
@@ -66,6 +72,13 @@ const createOrder = asyncHandler(async (req) => {
         {
           orderId: orderId
         }
+      const dataMail = {
+        to: req.body.email,
+        text: "Cảm ơn bạn đã đặt hàng",
+        subject: "Đặt hàng",
+        link:  `Cảm ơn bạn đã đặt hàng: <br> Mã đơn hàng của bạn là: ${orderId} <br> Hãy truy cập vào trang https://ecom-noithat.vercel.app/dashboard/orders để theo dõi đơn hàng`,
+      };
+      sendEmailCreateOrder(dataMail);
       return data
     } catch (error) {
       throw new Error(error);

@@ -1,7 +1,7 @@
 const Category = require("../models/category.model");
 const Room = require("../models/room.model");
 const Product = require("../models/product.model");
-
+const slugify = require("slugify");
 const asyncHandler = require('express-async-handler');
 const validateMongoDbId = require("../../utils/validateMongodbId");
 
@@ -10,9 +10,14 @@ const jwt = require("jsonwebtoken");
 // register createCate 
 const createCate = asyncHandler(async (reqBody) => {
   try {
+    const slugify = ""
+    if (reqBody.nameCate) {
+      slugify = slugify(reqBody.nameCate);
+    }
     const newCategory = await Category.create(
       {
         nameCate: reqBody.nameCate,
+        slug: slugify,
       });
     if(reqBody.roomId)
     {
@@ -66,6 +71,11 @@ const updateCategory = asyncHandler(async(req) => {
       let findRoom = await Room.findById(req.body.roomId);
       findRoom.categories.push(updateCategory._id);
       findRoom.save();
+    }
+    if(req.body.nameCate)
+    {
+      updateCategory.slug = slugify(req.body.nameCate);
+      await updateCategory.save()
     }
     return updateCategory;
   } catch (error) {

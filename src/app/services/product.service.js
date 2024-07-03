@@ -193,7 +193,7 @@ const searchProduct = asyncHandler(async (req) => {
       updatedAt: 0,
       __v: 0,
       enable: 0,
-    }).sort({createdAt: -1}).populate("category", "nameCate icUrl").populate("room", "nameRoom");
+    }).sort({createdAt: -1}).populate("category", "nameCate").populate("room", "nameRoom");
     return searchResult;
   } catch (error) {
     throw new Error(error);
@@ -253,7 +253,7 @@ const getAllProduct = asyncHandler(async (req) => {
       updatedAt: 0,
       __v: 0,
       enable: 0,
-    }).sort(sort).skip((page - 1) * limit).limit(limit).populate("category", "nameCate").populate("room", "nameRoom icUrl");;
+    }).sort(sort).skip((page - 1) * limit).limit(limit).populate("category", "nameCate").populate("room", "nameRoom");;
     const data = {
       total: productCount,
       product,
@@ -289,7 +289,7 @@ const getAllProductAdmin = asyncHandler(async (req) => {
       createdAt: 0,
       updatedAt: 0,
       __v: 0,
-    }).sort({createdAt: -1}).populate("category", "nameCate").populate("room", "nameRoom icUrl");
+    }).sort({createdAt: -1}).populate("category", "nameCate").populate("room", "nameRoom");
     // skip((page - 1) * limit).limit(limit);;
     return product;
   } catch (error) {
@@ -297,15 +297,15 @@ const getAllProductAdmin = asyncHandler(async (req) => {
   }
 });
 
-const getProductCategory = asyncHandler(async (id) => {
+const getProductCategory = asyncHandler(async (slug) => {
   try {
-    const products = await Product.find({category: id, enable: true}, {
+    const products = await Product.find({slug: slug, enable: true}, {
       sold: 0,
       createdAt: 0,
       updatedAt: 0,
       __v: 0,
       enable: 0,
-    }).sort({createdAt: -1}).populate("category", "nameCate").populate("room", "nameRoom icUrl");
+    }).sort({createdAt: -1}).populate("category", "nameCate").populate("room", "nameRoom");
     return products;
   } catch (error) {
     throw new Error(error);

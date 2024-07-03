@@ -39,13 +39,18 @@ const getaCoupon = asyncHandler(async (code) => {
       code: 1,
       discount: 1,
       expiry: 1,
+      quantity: 1
     });
+    if(!coupon)
+    {
+      throw new Error("Mã giảm giá không đúng");
+    }
     const now = new Date();
     if(now.getTime() >= coupon.expiry.getTime())
     {
       throw new Error("Mã giảm giá đã hết hạn");
     }
-    if(coupon.quantity == 0)
+    if(coupon.quantity === 0)
     {
       throw new Error("Mã giảm giá đã hết")
     }

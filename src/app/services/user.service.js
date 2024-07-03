@@ -156,7 +156,7 @@ const forgotPasswordOTP = asyncHandler(async (req) => {
 
     const data = {
       to: email,
-      text: "Hey User",
+      text: "Forgot Password",
       subject: "Forgot Password OTP",
       link:  otpCode.toString(),
     };

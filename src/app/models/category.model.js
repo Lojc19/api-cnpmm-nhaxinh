@@ -6,6 +6,12 @@ var categorySchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
+    slug: {
+        type: String,
+        required: true,
+        unique: true,
+        lowercase: true,
+    }
 }, {
     collection: "categories",
     timestamps: true,

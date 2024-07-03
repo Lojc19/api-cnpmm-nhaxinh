@@ -88,9 +88,8 @@ const searchProduct = asyncHandler(async (req, res) => {
 });
 
 const getProductCategory = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-  validateMongoDbId(id);
-  const data = await productService.getProductCategory(id);
+  const { slug } = req.params;
+  const data = await productService.getProductCategory(slug);
   res.json({
     status:"success",
     data,
