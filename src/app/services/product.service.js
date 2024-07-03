@@ -300,8 +300,6 @@ const getAllProductAdmin = asyncHandler(async (req) => {
 const getProductCategory = asyncHandler(async (slug) => {
   try {
     const products = await Product.find({ enable: true }, {
-      sold: 0,
-      createdAt: 0,
       updatedAt: 0,
       __v: 0,
       enable: 0,
