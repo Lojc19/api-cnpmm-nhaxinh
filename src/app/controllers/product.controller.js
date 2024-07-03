@@ -1,5 +1,3 @@
-const Product = require("../models/product.model");
-const User = require("../models/user.model");
 const asyncHandler = require("express-async-handler");
 const productService = require("../services/product.service")
 
@@ -69,6 +67,15 @@ const getAllProduct = asyncHandler(async (req, res) => {
   })
 });
 
+const getProductBestSell = asyncHandler(async (req, res) => {
+  const data = await productService.getProductBestSell(req);
+  res.json({
+    status: "success",
+    data,
+    message: ""
+  })
+});
+
 const getAllProductAdmin = asyncHandler(async (req, res) => {
   const data = await productService.getAllProductAdmin(req);
   res.json({
@@ -120,5 +127,6 @@ module.exports = {
   searchProduct,
   getAllProductAdmin,
   updateImageProduct,
-  updateImageProductDelete
+  updateImageProductDelete,
+  getProductBestSell
 };

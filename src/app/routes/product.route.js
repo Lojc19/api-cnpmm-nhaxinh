@@ -1,4 +1,5 @@
 const express = require("express");
+const router = express.Router();
 const {
   createProduct,
   getaProduct,
@@ -10,14 +11,14 @@ const {
   searchProduct,
   getAllProductAdmin,
   updateImageProduct,
-  updateImageProductDelete
+  updateImageProductDelete,
+  getProductBestSell
 } = require("../controllers/product.controller");
 const { isAdmin, authMiddleware } = require("../middlewares/authMiddleware");
 const {uploadCloud} = require("../../config/cloudinary");
 
-const router = express.Router();
-
 router.post("/create-product", authMiddleware, isAdmin, uploadCloud.array('images', 5), createProduct);
+router.get("/bestsellers", getProductBestSell);
 
 router.get("/:slug", getaProduct);
 router.get("/category/:slug", getProductCategory);

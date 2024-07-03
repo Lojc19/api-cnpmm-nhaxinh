@@ -312,6 +312,20 @@ const getProductCategory = asyncHandler(async (slug) => {
   }
 });
 
+const getProductBestSell = asyncHandler(async (req) => {
+  try {
+    const products = await Product.find({enable: true}, {
+      createdAt: 0,
+      updatedAt: 0,
+      __v: 0,
+      enable: 0,
+    }).sort({sold: -1}).limit(8).populate("category", "nameCate").populate("room", "nameRoom");
+    return products;
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
 const getProductRoom = asyncHandler(async (id) => {
   try {
     const product = await Product.find({room: id, enable: true},{
@@ -340,5 +354,6 @@ module.exports = {
   searchProduct,
   getAllProductAdmin,
   updateImageProduct,
-  updateImageProductDelete
+  updateImageProductDelete,
+  getProductBestSell
 };
