@@ -299,13 +299,20 @@ const getAllProductAdmin = asyncHandler(async (req) => {
 
 const getProductCategory = asyncHandler(async (slug) => {
   try {
-    const products = await Product.find({slug: slug, enable: true}, {
+    const products = await Product.find({ enable: true }, {
       sold: 0,
       createdAt: 0,
       updatedAt: 0,
       __v: 0,
       enable: 0,
-    }).sort({createdAt: -1}).populate("category", "nameCate").populate("room", "nameRoom");
+    })
+    .sort({ createdAt: -1 })
+    .populate({
+      path: 'category',
+      match: { slug: slug },
+      select: 'nameCate'
+    })
+    .populate("room", "nameRoom");
     return products;
   } catch (error) {
     throw new Error(error);
