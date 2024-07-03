@@ -10,14 +10,14 @@ const jwt = require("jsonwebtoken");
 // register createCate 
 const createCate = asyncHandler(async (reqBody) => {
   try {
-    const nameSlug = ""
+    let nameSlug = ""
     if (reqBody.nameCate) {
       nameSlug = slugify(reqBody.nameCate);
     }
     const newCategory = await Category.create(
       {
         nameCate: reqBody.nameCate,
-        slug: nameSlug,
+        slug: nameSlug
       });
     if(reqBody.roomId)
     {
