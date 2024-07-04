@@ -299,19 +299,19 @@ const getAllProductAdmin = asyncHandler(async (req) => {
 
 const getProductCategory = asyncHandler(async (slug) => {
   try {
+    console.log("Abc")
     const products = await Product.find({ enable: true }, {
       updatedAt: 0,
       __v: 0,
       enable: 0,
     })
     .sort({ createdAt: -1 })
-    .populate({
-      path: 'category',
-      match: { slug: slug },
-      select: 'nameCate'
-    })
+    .populate("category", "nameCate slug")
     .populate("room", "nameRoom");
-    return products;
+    const filteredProducts = products.filter(product => product.category && product.category.slug === slug);
+    console.log(filteredProducts)
+
+    return filteredProducts;
   } catch (error) {
     throw new Error(error);
   }
