@@ -106,7 +106,6 @@ const updateImageProduct = asyncHandler(async (req) => {
     }
 
     const updatedUrls = req.files.map(item => ({ url: item.path }));
-    
     const setObj = {};
     const arrayFilters = [];
 
@@ -153,6 +152,25 @@ const updateImageProductDelete = asyncHandler(async (req, res) => {
     deleteImagesFileName(fileName);
     return deleteImageProduct;
   } catch (error) {
+    throw new Error(error);
+  }
+});
+
+const updateImageProductAdd = asyncHandler(async (req, res) => {
+  try {
+    const { _id } = req.params;
+    if(!req.files){
+      throw new Error("Miss input")
+    }
+    const addImageUrls = req.files.map(item => ({ url: item.path }));
+
+    await Product.updateOne(
+      { _id: _id },
+      { $push: { images: addImageUrls } }
+    );
+    return;
+  } catch (error) {
+    deleteImages(req.files)
     throw new Error(error);
   }
 });
@@ -360,5 +378,6 @@ module.exports = {
   getAllProductAdmin,
   updateImageProduct,
   updateImageProductDelete,
-  getProductBestSell
+  getProductBestSell,
+  updateImageProductAdd
 };
