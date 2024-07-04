@@ -36,6 +36,14 @@ const updateImageProductDelete = asyncHandler(async (req, res) => {
   })
 });
 
+const updateImageProductAdd = asyncHandler(async (req, res) => {
+  const data = await productService.updateImageProductAdd(req);
+  res.json({
+    status: "success",
+    message: "Cập nhật thành công"
+  })
+});
+
 const deleteProduct = asyncHandler(async (req, res) => {
   try {
     const deleteProduct = await productService.deleteProduct(req);
@@ -128,5 +136,6 @@ module.exports = {
   getAllProductAdmin,
   updateImageProduct,
   updateImageProductDelete,
-  getProductBestSell
+  getProductBestSell,
+  updateImageProductAdd
 };
