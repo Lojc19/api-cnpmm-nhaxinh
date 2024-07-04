@@ -63,7 +63,6 @@ const getaCoupon = asyncHandler(async (code) => {
 const getallCoupon = asyncHandler(async () => {
   try {
     const data = await Coupon.find({},{
-      createdAt: 1,
       updatedAt: 0,
       __v: 0
     });
