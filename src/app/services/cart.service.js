@@ -7,7 +7,10 @@ const validateMongoDbId = require("../../utils/validateMongodbId");
 
 const addtoCart = asyncHandler(async (req) => {
     const { productId, quantity } = req.body;
-
+    if(quantity >= 2)
+    {
+      throw new Error("Giới hạn 1 sản phẩm, nếu có nhu cầu mua số lượng lớn vui lòng liên hệ qua hotline")
+    }
     const userId = req.user._id; //TODO: the logged in user id
   
     try {
@@ -20,18 +23,19 @@ const addtoCart = asyncHandler(async (req) => {
   
         if (itemIndex > -1) {
           //product exists in the cart, update the quantity
-          let productItem = cart.products[itemIndex]; // product trong cart
-          if(productItem.quantity + quantity <= product.quantity)
-          {
-            productItem.quantity = productItem.quantity + quantity;
-            productItem.totalPriceItem = product.priceSale * productItem.quantity;
-            cart.products[itemIndex] = productItem;
-          }
-          else {
-            throw new Error("Số lượng không khả dụng")
-          }
+          throw new Error("Bạn không thể thêm vào giỏ hàng, giới hạn 1 sản phẩm, nếu có nhu cầu mua số lượng lớn vui lòng liên hệ qua hotline")
+          // let productItem = cart.products[itemIndex]; // product trong cart
+          // if(productItem.quantity + quantity <= product.quantity)
+          // {
+          //   productItem.quantity = productItem.quantity + quantity;
+          //   productItem.totalPriceItem = product.priceSale * productItem.quantity;
+          //   cart.products[itemIndex] = productItem;
+          // }
+          // else {
+          //   throw new Error("Số lượng không khả dụng")
+          // }
         } else {
-          if(quantity <= product.quantity)
+          if(product.quantity > 0)
           {
             totalPriceItem = product.priceSale * quantity;
             //product does not exists in cart, add new item
@@ -136,6 +140,10 @@ const emptyCart = asyncHandler(async (req) => {
 // }
 const updateCart = asyncHandler(async (req) => {
   const { quantity, productId } = req.body;
+  if(quantity > 1)
+  {
+    throw new Error("Giới hạn 1 sản phẩm, nếu có nhu cầu mua số lượng lớn vui lòng liên hệ qua hotline");
+  }
   const userId = req.user._id; //TODO: the logged in user id
   try {
     let cart = await Cart.findOne({ userId });
