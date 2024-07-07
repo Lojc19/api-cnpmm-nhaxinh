@@ -72,6 +72,25 @@ const getallCoupon = asyncHandler(async () => {
   }
 });
 
+const getallCouponCustomer = asyncHandler(async () => {
+  try {
+    const currentDate = new Date();
+    const data = await Coupon.find({
+      expiry: { $gt: currentDate },
+      quantity: { $gt: 0 }
+    }, {
+      createdAt: 0,
+      _id: 0,
+      updatedAt: 0,
+      __v: 0
+    });
+    return data
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+
 const deleteCoupon = asyncHandler(async (_id) => {
   try {
     await Coupon.findOneAndDelete({_id: _id});
@@ -92,4 +111,4 @@ const updateCoupon = asyncHandler(async (_id, req) => {
   }
 });
 
-module.exports = {createCoupon, getaCoupon, getallCoupon, deleteCoupon, updateCoupon};
+module.exports = {createCoupon, getaCoupon, getallCoupon, deleteCoupon, updateCoupon, getallCouponCustomer};

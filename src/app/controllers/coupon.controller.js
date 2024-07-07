@@ -29,6 +29,14 @@ const getallCoupon = asyncHandler(async (req, res) => {
   })
 });
 
+const getallCouponCustomer = asyncHandler(async (req, res) => {
+  const data = await couponService.getallCouponCustomer();
+  res.json({
+    status: "success",
+    data
+  })
+});
+
 const deleteCoupon = asyncHandler(async (req, res) => {
   const { _id } = req.params;
   const data = await couponService.deleteCoupon(_id);
@@ -49,4 +57,4 @@ const updateCoupon = asyncHandler(async (req, res) => {
   })
 });
 
-module.exports = {updateCoupon, deleteCoupon, getallCoupon, getaCoupon, createCoupon};
+module.exports = {updateCoupon, deleteCoupon, getallCoupon, getaCoupon, createCoupon, getallCouponCustomer};

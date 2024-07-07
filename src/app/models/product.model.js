@@ -78,6 +78,9 @@ var productSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    tags: {
+      type: String,
+    },
   },
   {
     collection: "products",

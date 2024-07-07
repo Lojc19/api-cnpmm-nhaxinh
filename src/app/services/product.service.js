@@ -29,6 +29,7 @@ const createProduct = asyncHandler(async (req) => {
       priceSale: req.body.price,
       quantity: req.body.quantity,
       enable: req.body.enable,
+      tags: req.body.tags,
     });
     return productNew;
   } catch (error) {
@@ -70,6 +71,7 @@ const updateProduct = asyncHandler(async (req) => {
       sale: dataUpdate?.sale,
       quantity: dataUpdate?.quantity,
       enable: dataUpdate?.enable,
+      tags: dataUpdate?.tags,
     },
     {
       arrayFilters: arrayFilters,
