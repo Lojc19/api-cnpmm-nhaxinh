@@ -21,6 +21,7 @@ const overviewOrder = asyncHandler(async () => {
                         $gte: startOfCurrentYear,
                         $lt: startOfNextYear,
                     },
+                    PaymentStatus: 'Paid',
                 },
             },
             {
@@ -61,4 +62,40 @@ const overviewOrder = asyncHandler(async () => {
     }
 });
 
-module.exports = { overviewOrder }
+const orderDate = asyncHandler(async (req) => {
+    try {
+        const { startDate, endDate } = req.query;
+        console.log(req.query)
+        const orders = await Order.aggregate([
+            {
+                // Lọc các đơn hàng trong khoảng thời gian từ startDate đến endDate
+                $match: {
+                    orderTime: {
+                        $gte: new Date(startDate),
+                        $lt: new Date(endDate),
+                    },
+                    PaymentStatus: 'Paid', // Thêm điều kiện PaymentStatus là 'paid' nếu cần
+                },
+            },
+            {
+                // Nhóm các đơn hàng theo ngày
+                $group: {
+                    _id: { $dateToString: { format: '%Y-%m-%d', date: '$orderTime' } },
+                    totalAmount: { $sum: '$total' },
+                    count: { $sum: 1 },
+                },
+            },
+            {
+                // Sắp xếp kết quả theo ngày
+                $sort: {
+                    '_id': 1,
+                },
+            },
+        ]);
+        return orders
+    } catch (error) {
+        throw new Error(error);
+    }
+});
+
+module.exports = { overviewOrder, orderDate }

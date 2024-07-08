@@ -9,4 +9,12 @@ const overviewOrder = asyncHandler(async (req, res) => {
   })
 });
 
-module.exports = {overviewOrder};
+const orderDate = asyncHandler(async (req, res) => {
+  const data = await statisticalService.orderDate(req)
+  res.json({
+    status:"success",
+    data
+  })
+});
+
+module.exports = {overviewOrder, orderDate};
