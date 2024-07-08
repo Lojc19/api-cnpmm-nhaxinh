@@ -1,9 +1,9 @@
 const express = require("express");
-const { overviewStatistical } = require("../controllers/statistical.controller");
-const { authMiddleware, isAdmin } = require("../middlewares/authMiddleware"); 
+const { overviewOrder } = require("../controllers/statistical.controller");
+const { authMiddleware, isAdmin, isAdminStaff } = require("../middlewares/authMiddleware"); 
 const router = express.Router();
 
-// create
-router.get("/",authMiddleware, isAdmin, overviewStatistical);
+
+router.get("/overviewOrder",authMiddleware, isAdminStaff, overviewOrder);
 
 module.exports = router;
