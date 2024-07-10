@@ -102,9 +102,10 @@ const getAllOrders = asyncHandler(async () => {
     }
 });
 
-const getOrderDetail = asyncHandler(async (_id) => {
+const getOrderDetail = asyncHandler(async (orderId) => {
     try {
-    const orderDetail = await Order.findOne({ _id: _id }, {
+    const orderDetail = await Order.findOne({ orderId: orderId }, {
+        _id: 0,
         createdAt: 0,
         updatedAt: 0,
         __v: 0

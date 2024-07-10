@@ -12,8 +12,8 @@ const createOrder = asyncHandler(async (req, res) => {
 });
   
   const getOrderDetail = asyncHandler(async (req, res) => {
-    const { _id } = req.params;
-    const data = await orderService.getOrderDetail(_id);
+    const { orderId } = req.params;
+    const data = await orderService.getOrderDetail(orderId);
     res.json({
       status:"success",
       data,

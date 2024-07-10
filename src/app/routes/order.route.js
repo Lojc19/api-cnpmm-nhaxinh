@@ -13,7 +13,7 @@ router.post("/",authMiddleware, createOrder);
 
 router.get("/myOrder",authMiddleware, getOrderByUserId);
 
-router.get("/detail/:_id",authMiddleware, getOrderDetail);
+router.get("/detail/:orderId", getOrderDetail);
 
 router.get("/getAll",authMiddleware, isAdminStaff, getAllOrders);
 
