@@ -268,7 +268,6 @@ const getAllProduct = asyncHandler(async (req) => {
       if (((page - 1) * limit) >= productCount) throw new Error("This Page does not exists");
     }
     const product = await Product.find(filter,{
-      sold: 0,
       createdAt: 0,
       updatedAt: 0,
       __v: 0,
@@ -319,7 +318,6 @@ const getAllProductAdmin = asyncHandler(async (req) => {
 
 const getProductCategory = asyncHandler(async (slug) => {
   try {
-    console.log("Abc")
     const products = await Product.find({ enable: true }, {
       updatedAt: 0,
       __v: 0,
@@ -329,8 +327,6 @@ const getProductCategory = asyncHandler(async (slug) => {
     .populate("category", "nameCate slug")
     .populate("room", "nameRoom");
     const filteredProducts = products.filter(product => product.category && product.category.slug === slug);
-    console.log(filteredProducts)
-
     return filteredProducts;
   } catch (error) {
     throw new Error(error);
