@@ -84,6 +84,15 @@ const getProductBestSell = asyncHandler(async (req, res) => {
   })
 });
 
+const getProductRecommend = asyncHandler(async (req, res) => {
+  const data = await productService.getProductRecommend(req);
+  res.json({
+    status: "success",
+    data,
+    message: "",
+  })
+});
+
 const getAllProductAdmin = asyncHandler(async (req, res) => {
   const data = await productService.getAllProductAdmin(req);
   res.json({
@@ -137,5 +146,6 @@ module.exports = {
   updateImageProduct,
   updateImageProductDelete,
   getProductBestSell,
-  updateImageProductAdd
+  updateImageProductAdd,
+  getProductRecommend
 };

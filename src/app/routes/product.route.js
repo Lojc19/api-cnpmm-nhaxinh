@@ -13,7 +13,8 @@ const {
   updateImageProduct,
   updateImageProductDelete,
   getProductBestSell,
-  updateImageProductAdd
+  updateImageProductAdd,
+  getProductRecommend
 } = require("../controllers/product.controller");
 const { isAdmin, authMiddleware } = require("../middlewares/authMiddleware");
 const {uploadCloud} = require("../../config/cloudinary");
@@ -33,6 +34,8 @@ router.post("/updateImageAdd/:_id", authMiddleware, isAdmin,uploadCloud.array('i
 router.delete("/:_id", authMiddleware, isAdmin, deleteProduct);
 
 router.get("/", getAllProduct);
+
+router.get("/recommend/:cateId", getProductRecommend);
 
 router.get("/admin/getAll",authMiddleware, isAdmin, getAllProductAdmin);
 

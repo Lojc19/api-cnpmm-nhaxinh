@@ -1,4 +1,6 @@
 const Product = require("../models/product.model");
+const Category = require("../models/category.model");
+
 const User = require("../models/user.model");
 const asyncHandler = require("express-async-handler");
 const validateMongoDbId = require("../../utils/validateMongodbId");
@@ -318,16 +320,17 @@ const getAllProductAdmin = asyncHandler(async (req) => {
 
 const getProductCategory = asyncHandler(async (slug) => {
   try {
-    const products = await Product.find({ enable: true }, {
+    const category = await Category.findOne({slug: slug});
+    const products = await Product.find({ category: category._id, enable: true }, {
       updatedAt: 0,
       __v: 0,
       enable: 0,
     })
     .sort({ createdAt: -1 })
-    .populate("category", "nameCate slug")
+    .populate("category", "nameCate")
     .populate("room", "nameRoom");
-    const filteredProducts = products.filter(product => product.category && product.category.slug === slug);
-    return filteredProducts;
+    // const filteredProducts = products.filter(product => product.category && product.category.slug === slug);
+    return products;
   } catch (error) {
     throw new Error(error);
   }
@@ -341,6 +344,25 @@ const getProductBestSell = asyncHandler(async (req) => {
       __v: 0,
       enable: 0,
     }).sort({sold: -1}).limit(8).populate("category", "nameCate").populate("room", "nameRoom");
+    return products;
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+const getProductRecommend = asyncHandler(async (req) => {
+  try {
+    const { cateId } = req.params;
+    const products = await Product.find({category: cateId, enable: true }, {
+      updatedAt: 0,
+      __v: 0,
+      enable: 0,
+    })
+    .sort({ sold: -1 })
+    .limit(8)
+    .populate("category", "nameCate")
+    .populate("room", "nameRoom");
+
     return products;
   } catch (error) {
     throw new Error(error);
@@ -377,5 +399,6 @@ module.exports = {
   updateImageProduct,
   updateImageProductDelete,
   getProductBestSell,
-  updateImageProductAdd
+  updateImageProductAdd,
+  getProductRecommend
 };
