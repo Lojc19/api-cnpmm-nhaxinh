@@ -84,6 +84,14 @@ const getProductBestSell = asyncHandler(async (req, res) => {
   })
 });
 
+const getProductSale = asyncHandler(async (req, res) => {
+  const data = await productService.getProductSale(req);
+  res.json({
+    status: "success",
+    data,
+    message: ""
+  })
+});
 const getProductRecommend = asyncHandler(async (req, res) => {
   const data = await productService.getProductRecommend(req);
   res.json({
@@ -147,5 +155,6 @@ module.exports = {
   updateImageProductDelete,
   getProductBestSell,
   updateImageProductAdd,
-  getProductRecommend
+  getProductRecommend,
+  getProductSale
 };

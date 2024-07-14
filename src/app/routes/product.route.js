@@ -14,15 +14,16 @@ const {
   updateImageProductDelete,
   getProductBestSell,
   updateImageProductAdd,
-  getProductRecommend
+  getProductRecommend,
+  getProductSale
 } = require("../controllers/product.controller");
 const { isAdmin, authMiddleware } = require("../middlewares/authMiddleware");
 const {uploadCloud} = require("../../config/cloudinary");
 
 router.post("/create-product", authMiddleware, isAdmin, uploadCloud.array('images', 5), createProduct);
 router.get("/bestsellers", getProductBestSell);
+router.get("/sale", getProductSale);
 
-router.get("/:slug", getaProduct);
 router.get("/category/:slug", getProductCategory);
 router.get("/room/:id", getProductRoom);
 
@@ -31,14 +32,16 @@ router.post("/updateImageProduct/:_id", authMiddleware, isAdmin, uploadCloud.arr
 router.delete("/updateImageDelete/", authMiddleware, isAdmin, updateImageProductDelete);
 router.post("/updateImageAdd/:_id", authMiddleware, isAdmin,uploadCloud.array('images', 5), updateImageProductAdd);
 
-router.delete("/:_id", authMiddleware, isAdmin, deleteProduct);
-
 router.get("/", getAllProduct);
+
+router.delete("/:_id", authMiddleware, isAdmin, deleteProduct);
 
 router.get("/recommend/:cateId", getProductRecommend);
 
 router.get("/admin/getAll",authMiddleware, isAdmin, getAllProductAdmin);
 
 router.get("/search/:s", searchProduct);
+
+router.get("/:slug", getaProduct);
 
 module.exports = router;
