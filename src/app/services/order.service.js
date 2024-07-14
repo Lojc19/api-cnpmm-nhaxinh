@@ -72,7 +72,7 @@ const createOrder = asyncHandler(async (req) => {
         {
           orderId: orderId
         }
-      if((req.body.PaymentMethod).toLowerCas32e() === "vnpay")
+      if((req.body.PaymentMethod).toLowerCase() === "vnpay")
       {
         return data
       }
