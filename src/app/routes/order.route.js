@@ -5,6 +5,7 @@ const router = express.Router();
 let $ = require('jquery');
 const Order = require("../models/order.model");
 const Product = require("../models/product.model");
+const { sendEmailCreateOrder } = require("../controllers/email.controller");
 
 const request = require('request');
 const moment = require('moment');
@@ -126,12 +127,19 @@ router.get('/vnpay_return', function (req, res, next) {
 });
 
 const updateOrderSuccess = async(orderId) => {
-    await Order.findOneAndUpdate(
+    const order = await Order.findOneAndUpdate(
         {orderId: orderId},  
         { PaymentStatus: "Paid" } , 
         {
         new: true
-      })
+    })
+    const dataMail = {
+        to: order.email,
+        text: "Cảm ơn bạn đã đặt hàng thanh toán qua VNPAY",
+        subject: "Đặt hàng",
+        link:  `Cảm ơn bạn đã đặt hàng: <br> Mã đơn hàng của bạn là: ${orderId} <br> Hãy truy cập vào trang https://ecom-noithat.vercel.app/dashboard/orders để theo dõi đơn hàng`,
+      };
+      sendEmailCreateOrder(dataMail)
     return
 }
 

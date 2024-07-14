@@ -72,13 +72,17 @@ const createOrder = asyncHandler(async (req) => {
         {
           orderId: orderId
         }
+      if((req.body.PaymentMethod).toLowerCas32e() === "vnpay")
+      {
+        return data
+      }
       const dataMail = {
         to: req.body.email,
         text: "Cảm ơn bạn đã đặt hàng",
         subject: "Đặt hàng",
         link:  `Cảm ơn bạn đã đặt hàng: <br> Mã đơn hàng của bạn là: ${orderId} <br> Hãy truy cập vào trang https://ecom-noithat.vercel.app/dashboard/orders để theo dõi đơn hàng`,
       };
-      sendEmailCreateOrder(dataMail);
+      sendEmailCreateOrder(dataMail)
       return data
     } catch (error) {
       throw new Error(error);
