@@ -353,7 +353,6 @@ const getProductBestSell = asyncHandler(async (req) => {
 const getProductSale = asyncHandler(async (req) => {
   try {
     const products = await Product.find({enable: true, sale: { $gt: 0 }}, {
-      createdAt: 0,
       updatedAt: 0,
       __v: 0,
       enable: 0,
