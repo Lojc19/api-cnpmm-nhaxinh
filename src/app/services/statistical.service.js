@@ -65,14 +65,19 @@ const overviewOrder = asyncHandler(async () => {
 const orderDate = asyncHandler(async (req) => {
     try {
         const { startDate, endDate } = req.query;
-        console.log(req.query)
+        // Chuyển đổi startDate và endDate sang đối tượng Date
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+
+        // Thêm một ngày vào endDate
+        end.setDate(end.getDate() + 1);
         const orders = await Order.aggregate([
             {
                 // Lọc các đơn hàng trong khoảng thời gian từ startDate đến endDate
                 $match: {
                     orderTime: {
-                        $gte: new Date(startDate),
-                        $lt: new Date(endDate),
+                        $gte: start,
+                        $lt: end,
                     },
                     PaymentStatus: 'Paid', // Thêm điều kiện PaymentStatus là 'paid' nếu cần
                 },
