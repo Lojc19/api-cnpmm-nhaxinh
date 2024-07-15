@@ -207,8 +207,8 @@ const updateOrderStatusAdmin = asyncHandler(async (req) => {
       if(status == "Delivered")
       {
 
-        await Order.findByIdAndUpdate(
-          _id,
+        await Order.findOneAndUpdate(
+          {orderId: orderId},
           {
             PaymentStatus: "Paid",
           },
