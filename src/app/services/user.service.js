@@ -61,7 +61,7 @@ const loginUser = asyncHandler(async (req, res) => {
     }
     return data
   } else {
-    throw new Error("Invalid Credentials");
+    throw new Error("Thông tin đăng nhập chưa đúng");
   }
 });
 
