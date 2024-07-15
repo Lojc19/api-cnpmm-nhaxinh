@@ -144,13 +144,7 @@ const updateOrderSuccess = async(orderId) => {
 }
 
 const updateOrderFail = async(orderId) => {
-    const order = await Order.findOneAndUpdate(
-        {orderId: orderId},  
-        { status: "Cancelled" } , 
-        {
-        new: true
-      })
-
+    const order = await Order.findOne({orderId: orderId})
       let update = order.products.map((item) => {
         return {
           updateOne: {
@@ -160,6 +154,7 @@ const updateOrderFail = async(orderId) => {
         };
       });
       const updated = await Product.bulkWrite(update, {});
+      const deletedOrder = await Order.findOneAndDelete({ orderId: orderId });
     return
 }
 
