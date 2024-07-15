@@ -5,7 +5,7 @@ const validateMongoDbId = require("../../utils/validateMongodbId");
 const { generateToken } = require("../../config/jwtToken");
 const { generateRefreshToken } = require("../../config/refreshtoken");
 const crypto = require("crypto");
-const sendEmail = require("../controllers/email.controller");
+const {sendEmail} = require("../controllers/email.controller");
 const jwt = require("jsonwebtoken");
 
 // register User 
@@ -147,7 +147,7 @@ const updatePassword = asyncHandler(async (req) => {
 const forgotPasswordOTP = asyncHandler(async (req) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
-  if (!user) throw new Error("User not found with this email");
+  if (!user) throw new Error("Không tìm thấy người dùng");
   try {
     // const token = await user.createPasswordResetToken();
     const otpCode = await user.createOTPResetPassword();
@@ -158,7 +158,7 @@ const forgotPasswordOTP = asyncHandler(async (req) => {
       to: email,
       text: "Forgot Password",
       subject: "Forgot Password OTP",
-      link:  otpCode.toString(),
+      link: otpCode.toString(),
     };
     sendEmail(data);
     return

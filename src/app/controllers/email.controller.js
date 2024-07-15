@@ -21,8 +21,6 @@ const sendEmail = asyncHandler(async (data) => {
         text: data.text, // plain text body
         html: data.link, // html body
     });
-
-    console.log("Message sent: %s", info.messageId);
 });
 
 const sendEmailCreateOrder = asyncHandler(async (data) => {

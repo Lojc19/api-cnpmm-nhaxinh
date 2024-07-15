@@ -11,13 +11,9 @@ const notFound = (req, res, next) => {
 const errorHandler = (err, req, res, next) => {
     const statuscode = res.statusCode == 200 ? 500 : res.statusCode;
     res.status(statuscode);
-    let message = err?.message;
-    if (message && message.startsWith("Error:")) {
-        message = message.substring(6).trim(); // Loại bỏ "Error:" và khoảng trắng sau đó
-    }
     res.json({
       status: "fail",
-      message: message,
+      message: err?.message.replace(/Error:\s*/g, ''),
       stack: err?.stack,
     });
   };
