@@ -141,14 +141,14 @@ const updateOrderStatusUser = asyncHandler(async (req) => {
     try {
 
       const { status } = req.body;
-      const { _id } = req.params;
+      const { orderId } = req.params;
       if(status != "Processing" && status != "Pending" && status != "Cancelled" && status != "Delivered") throw new Error("Trạng thái không hợp lệ")
-      let order = await Order.findOne({_id: _id});
+      let order = await Order.findOne({orderId: orderId});
       if(status !== "Cancelled") throw new Error("Lỗi")
       if(order.status == "Cancelled" || order.status != "Processing") throw new Error("Không chỉnh sửa được trạng thái đơn hàng")
 
-      await Order.findByIdAndUpdate(
-        _id,
+      await Order.findOneAndUpdate(
+        {orderId: orderId},
         {
           status: status,
         },
@@ -174,11 +174,11 @@ const updateOrderStatusUser = asyncHandler(async (req) => {
 const updateOrderStatusAdmin = asyncHandler(async (req) => {
     try {
       const { status } = req.body;
-      const { _id } = req.params;
+      const { orderId } = req.params;
       if(status != "Processing" && status != "Dispatched" && status != "Cancelled" && status != "Delivered") throw new Error("Trạng thái không hợp lệ")
 
-      const order = await Order.findByIdAndUpdate(
-        _id,
+      const order = await Order.findOneAndUpdate(
+        {orderId: orderId},
         {
           status: status,
         },

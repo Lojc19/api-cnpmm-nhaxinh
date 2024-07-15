@@ -18,9 +18,9 @@ router.get("/detail/:orderId", getOrderDetail);
 
 router.get("/getAll",authMiddleware, isAdminStaff, getAllOrders);
 
-router.put("/user/:_id",authMiddleware, updateOrderStatusUser);
+router.put("/user/:orderId",authMiddleware, updateOrderStatusUser);
 
-router.put("/admin/:_id",authMiddleware, isAdminStaff, updateOrderStatusAdmin);
+router.put("/admin/:orderId",authMiddleware, isAdminStaff, updateOrderStatusAdmin);
 
 router.put("/admin/ghn/create_order",authMiddleware, isAdminStaff, updateOrderStatusAdmin);
 
