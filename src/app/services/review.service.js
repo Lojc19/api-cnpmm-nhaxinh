@@ -89,6 +89,7 @@ const getReviewDetail = asyncHandler(async (req) => {
 const getAllReview = asyncHandler(async (req, res) => {
   try {
     const listReview = await Review.find({}, {
+      _id: 1,
       star: 1,
       comment: 1,
       createdAt: 1,
