@@ -193,6 +193,21 @@ const deleteProduct = asyncHandler(async (req, res) => {
 
 const getaProduct = asyncHandler(async (slug) => {
   try {
+    const findProduct = await Product.findOne({slug: slug},{
+      createdAt: 0,
+      updatedAt: 0,
+      __v: 0,
+      sold: 0,
+      enable: 0,
+    }).sort({createdAt: -1}).populate("category", "nameCate icUrl").populate("room", "nameRoom");
+    return findProduct;
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+const getaProductClient = asyncHandler(async (slug) => {
+  try {
     const findProduct = await Product.findOne({slug: slug, enable: true},{
       createdAt: 0,
       updatedAt: 0,
@@ -414,5 +429,6 @@ module.exports = {
   getProductBestSell,
   updateImageProductAdd,
   getProductRecommend,
-  getProductSale
+  getProductSale,
+  getaProductClient
 };

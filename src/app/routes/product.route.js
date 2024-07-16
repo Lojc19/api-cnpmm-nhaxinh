@@ -15,9 +15,10 @@ const {
   getProductBestSell,
   updateImageProductAdd,
   getProductRecommend,
-  getProductSale
+  getProductSale,
+  getaProductClient
 } = require("../controllers/product.controller");
-const { isAdmin, authMiddleware } = require("../middlewares/authMiddleware");
+const { isAdmin, authMiddleware, isAdminStaff } = require("../middlewares/authMiddleware");
 const {uploadCloud} = require("../../config/cloudinary");
 
 router.post("/create-product", authMiddleware, isAdmin, uploadCloud.array('images', 5), createProduct);
@@ -42,6 +43,8 @@ router.get("/admin/getAll",authMiddleware, isAdmin, getAllProductAdmin);
 
 router.get("/search/:s", searchProduct);
 
-router.get("/:slug", getaProduct);
+router.get("/:slug",authMiddleware, isAdminStaff, getaProduct);
+
+router.get("/detail/:slug", getaProductClient);
 
 module.exports = router;

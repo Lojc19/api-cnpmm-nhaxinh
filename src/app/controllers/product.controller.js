@@ -66,6 +66,16 @@ const getaProduct = asyncHandler(async (req, res) => {
   })
 });
 
+const getaProductClient = asyncHandler(async (req, res) => {
+  const { slug } = req.params;
+  const data = await productService.getaProductClient(slug);
+  res.json({
+    status: "success",
+    data,
+    message: "",
+  })
+});
+
 const getAllProduct = asyncHandler(async (req, res) => {
   const data = await productService.getAllProduct(req);
   res.json({
@@ -156,5 +166,6 @@ module.exports = {
   getProductBestSell,
   updateImageProductAdd,
   getProductRecommend,
-  getProductSale
+  getProductSale,
+  getaProductClient
 };
