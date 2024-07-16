@@ -96,7 +96,7 @@ const getAllOrders = asyncHandler(async () => {
             updatedAt: 0,
             __v: 0
         }).sort({orderTime: -1})
-        .populate({path: "products.product", select:'name description images specs priceSale'})  
+        .populate({path: "products.product", select:'name description images specs priceSale slug'})  
         .populate({path: "orderby", select:'firstname lastname'})
         .populate({path: "coupon", select:'code discount'})
         .exec();
@@ -113,7 +113,7 @@ const getOrderDetail = asyncHandler(async (orderId) => {
         updatedAt: 0,
         __v: 0
     })
-    .populate({path: "products.product", select:'name description images specs priceSale'})  
+    .populate({path: "products.product", select:'name description images specs priceSale slug'})  
     .populate({path: "coupon", select:'code discount'});
     return orderDetail
     } catch (error) {
@@ -128,7 +128,7 @@ const getOrderByUserId = asyncHandler(async (req) => {
         updatedAt: 0,
         __v: 0
       }).sort({orderTime: -1})
-        .populate({path: "products.product", select:'name description images specs priceSale'})  
+        .populate({path: "products.product", select:'name description images specs priceSale slug'})  
         .populate({path: "coupon", select:'code discount'})  
         .exec();
       return userorders
