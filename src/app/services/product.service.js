@@ -193,7 +193,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
 
 const getaProduct = asyncHandler(async (slug) => {
   try {
-    const findProduct = await Product.findOne({slug: slug},{
+    const findProduct = await Product.findOne({slug: slug, enable: true},{
       createdAt: 0,
       updatedAt: 0,
       __v: 0,
