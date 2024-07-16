@@ -93,7 +93,7 @@ const getAllReview = asyncHandler(async (req, res) => {
       comment: 1,
       createdAt: 1,
       enable: 1
-    }).sort({createdAt: -1}).populate({path: "userID", select:'firstname lastname'});
+    }).sort({createdAt: -1}).populate({path: "userID", select:'firstname lastname'}).populate("productID", "name code");;
     return listReview
   }
   catch(error) {
