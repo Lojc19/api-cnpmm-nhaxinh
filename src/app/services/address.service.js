@@ -6,7 +6,12 @@ const jwt = require("jsonwebtoken");
 const createAddress = asyncHandler(async (req) => {
   try {
     const { _id } = req.user;
-    const findAddress = await Address.findOne({userId: req.user._id})
+    const findAddress = await Address.find({userId: req.user._id})
+    const checkName = findAddress.some(address => address.nameAddress === req.body.nameAddress);
+    if(checkName)
+    {
+      throw new Error("Tên địa chỉ đã tồn tại")
+    }
     if(findAddress)
     {
       if(req.body.default == true){
